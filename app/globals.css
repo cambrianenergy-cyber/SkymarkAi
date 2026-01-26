@@ -1,0 +1,74 @@
+/* === GLOBAL DESIGN SYSTEM === */
+:root {
+  --font-sans: 'Segoe UI', 'Manrope', -apple-system, BlinkMacSystemFont, 'Arial', sans-serif;
+  --color-primary: #1976d2;
+  --color-secondary: #7c3aed;
+  --color-accent: #00897b;
+  --color-bg-main: linear-gradient(120deg, #e3f2fd 0%, #f5f7fa 100%);
+  --color-bg-card: linear-gradient(120deg, #fff 60%, #e3f2fd 100%);
+  --color-bg-header: linear-gradient(90deg, #1976d2 0%, #7c3aed 100%);
+  --color-bg-accent: #e0f2f1;
+  --color-border: #b0bec5;
+  --color-text-main: #1a237e;
+  --color-text-subtle: #607d8b;
+  --color-text-accent: #00897b;
+  --color-white: #fff;
+  --color-shadow: 0 8px 32px rgba(33,150,243,0.10);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background: var(--color-bg-main);
+  color: var(--color-text-main);
+  line-height: 1.7;
+  min-height: 100vh;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-sans);
+  font-weight: 900;
+  color: var(--color-primary);
+  letter-spacing: 1px;
+}
+
+a {
+  color: var(--color-primary);
+  text-decoration: underline;
+  font-weight: 700;
+  transition: color 0.15s;
+}
+a:hover {
+  color: var(--color-secondary);
+}
+
+button {
+  font-family: var(--font-sans);
+  font-weight: 700;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+}
+
+.card, .app-card {
+  background: var(--color-bg-card);
+  border: 2px solid var(--color-border);
+  border-radius: 18px;
+  box-shadow: var(--color-shadow);
+  padding: 32px 44px;
+}
+
+.header-gradient {
+  background: var(--color-bg-header);
+  color: var(--color-white);
+  border-radius: 22px;
+  box-shadow: 0 4px 24px rgba(33,150,243,0.10);
+}

@@ -1,0 +1,128 @@
+﻿rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    function isSignedIn() {
+      return request.auth != null;
+    }
+    
+    function getUserRole(workspaceId) {
+      return get(/databases/$(database)/documents/workspace_members/$(request.auth.uid + '_' + workspaceId)).data.role;
+    }
+    
+    function isMemberOf(workspaceId) {
+      return exists(/databases/$(database)/documents/workspace_members/$(request.auth.uid + '_' + workspaceId)) &&
+             get(/databases/$(database)/documents/workspace_members/$(request.auth.uid + '_' + workspaceId)).data.status == 'active';
+    }
+    
+    function canEdit(workspaceId) {
+      let role = getUserRole(workspaceId);
+      return role in ['owner', 'admin', 'member'];
+    }
+    
+    function canAdmin(workspaceId) {
+      let role = getUserRole(workspaceId);
+      return role in ['owner', 'admin'];
+    }
+    
+    function isOwner(workspaceId) {
+      let role = getUserRole(workspaceId);
+      return role == 'owner';
+    }
+    
+    match /users/{userId} {
+      allow read, write: if isSignedIn() && request.auth.uid == userId;
+    }
+    
+    match /workspaces/{workspaceId} {
+      allow read: if isSignedIn() && isMemberOf(workspaceId);
+      allow update: if isSignedIn() && isOwner(workspaceId);
+      allow create: if isSignedIn() && request.resource.data.ownerUserId == request.auth.uid;
+      allow delete: if isSignedIn() && isOwner(workspaceId);
+    }
+    
+    match /workspace_members/{memberId} {
+      allow read: if isSignedIn() && isMemberOf(resource.data.workspaceId);
+      allow create: if isSignedIn() && canAdmin(request.resource.data.workspaceId);
+      allow update: if isSignedIn() && canAdmin(resource.data.workspaceId) && resource.data.role != 'owner';
+      allow delete: if isSignedIn() && canAdmin(resource.data.workspaceId) && resource.data.role != 'owner';
+    }
+    
+    match /workflow_templates/{templateId} {
+      allow read: if isSignedIn();
+      allow write: if false;
+    }
+    
+    match /template_installs/{installId} {
+      allow read: if isSignedIn();
+      allow create: if isSignedIn();
+      allow delete: if isSignedIn() && request.auth.uid == resource.data.installedByUid;
+    }
+    
+    match /workflows/{workflowId} {
+      allow read: if isSignedIn() && isMemberOf(resource.data.workspaceId);
+      allow create: if isSignedIn() && canEdit(request.resource.data.workspaceId);
+      allow update: if isSignedIn() && canEdit(resource.data.workspaceId);
+      allow delete: if isSignedIn() && canAdmin(resource.data.workspaceId);
+    }
+    
+    match /workflow_runs/{runId} {
+      allow read: if isSignedIn() && isMemberOf(resource.data.workspaceId);
+      allow create, update: if isSignedIn() && canEdit(request.resource.data.workspaceId);
+      allow delete: if isSignedIn() && canAdmin(resource.data.workspaceId);
+    }
+    
+    match /leads/{leadId} {
+      allow read: if isSignedIn() && isMemberOf(resource.data.workspaceId);
+      allow create, update: if isSignedIn() && canEdit(request.resource.data.workspaceId);
+      allow delete: if isSignedIn() && canAdmin(resource.data.workspaceId);
+    }
+    
+    match /followup_sequences/{sequenceId} {
+      allow read: if isSignedIn() && isMemberOf(resource.data.workspaceId);
+      allow create, update: if isSignedIn() && canEdit(request.resource.data.workspaceId);
+      allow delete: if isSignedIn() && canAdmin(resource.data.workspaceId);
+    }
+    
+    match /followup_jobs/{jobId} {
+      allow read: if isSignedIn() && isMemberOf(resource.data.workspaceId);
+      allow create, update: if isSignedIn() && canEdit(request.resource.data.workspaceId);
+      allow delete: if isSignedIn() && canAdmin(resource.data.workspaceId);
+    }
+    
+    match /inbox_threads/{threadId} {
+      allow read: if isSignedIn() && isMemberOf(resource.data.workspaceId);
+      allow create, update: if isSignedIn() && canEdit(request.resource.data.workspaceId);
+      allow delete: if isSignedIn() && canAdmin(resource.data.workspaceId);
+    }
+    
+    match /inbox_messages/{messageId} {
+      allow read: if isSignedIn() && isMemberOf(resource.data.workspaceId);
+      allow create: if isSignedIn() && canEdit(request.resource.data.workspaceId);
+      allow update: if false;
+      allow delete: if isSignedIn() && canAdmin(resource.data.workspaceId);
+    }
+    
+    match /assets/{assetId} {
+      allow read: if isSignedIn() && isMemberOf(resource.data.workspaceId);
+      allow create, update: if isSignedIn() && canEdit(request.resource.data.workspaceId);
+      allow delete: if isSignedIn() && canAdmin(resource.data.workspaceId);
+    }
+    
+    match /scheduled_posts/{postId} {
+      allow read: if isSignedIn() && isMemberOf(resource.data.workspaceId);
+      allow create, update: if isSignedIn() && canEdit(request.resource.data.workspaceId);
+      allow delete: if isSignedIn() && canAdmin(resource.data.workspaceId);
+    }
+    
+    match /campaigns/{campaignId} {
+      allow read: if isSignedIn() && isMemberOf(resource.data.workspaceId);
+      allow create, update: if isSignedIn() && canEdit(request.resource.data.workspaceId);
+      allow delete: if isSignedIn() && canAdmin(resource.data.workspaceId);
+    }
+    
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

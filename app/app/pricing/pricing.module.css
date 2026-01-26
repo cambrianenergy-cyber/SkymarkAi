@@ -1,0 +1,101 @@
+.pricingPage {
+  background: linear-gradient(135deg, #f8fafc 0%, #e0e7ef 100%);
+  min-height: 100vh;
+  padding: 40px 0 60px 0;
+  font-family: 'Segoe UI', 'Roboto', Arial, sans-serif;
+}
+
+.title {
+  text-align: center;
+  font-size: 2.6rem;
+  font-weight: 700;
+  color: #1a237e;
+  margin-bottom: 0.5rem;
+}
+
+.subtitle {
+  text-align: center;
+  font-size: 1.25rem;
+  color: #374151;
+  margin-bottom: 2.5rem;
+}
+
+.tableWrapper {
+  overflow-x: auto;
+  margin-bottom: 2.5rem;
+}
+
+.pricingTable {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  background: #fff;
+  box-shadow: 0 2px 16px 0 rgba(30, 41, 59, 0.08);
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.pricingTable th, .pricingTable td {
+  padding: 1.1rem 1.2rem;
+  text-align: center;
+  border-bottom: 1px solid #e5e7eb;
+  font-size: 1.05rem;
+}
+
+.pricingTable th {
+  background: #f1f5f9;
+  color: #1a237e;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.pricingTable tr:last-child td {
+  border-bottom: none;
+}
+
+.price {
+  color: #0e7490;
+  font-size: 1.15rem;
+  font-weight: 700;
+}
+
+.bestFor {
+  color: #64748b;
+  font-size: 0.95rem;
+  font-weight: 400;
+}
+
+.addonTitle {
+  margin-top: 2.5rem;
+  font-size: 1.5rem;
+  color: #1a237e;
+  text-align: center;
+  font-weight: 600;
+}
+
+.addonTable {
+  margin: 0 auto;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 1px 8px 0 rgba(30, 41, 59, 0.06);
+  border-collapse: separate;
+  border-spacing: 0;
+  min-width: 350px;
+}
+
+.addonTable th, .addonTable td {
+  padding: 0.85rem 1.2rem;
+  text-align: left;
+  border-bottom: 1px solid #e5e7eb;
+  font-size: 1.05rem;
+}
+
+.addonTable th {
+  background: #f1f5f9;
+  color: #0e7490;
+  font-weight: 600;
+}
+
+.addonTable tr:last-child td {
+  border-bottom: none;
+}

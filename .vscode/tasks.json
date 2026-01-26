@@ -1,0 +1,113 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Dev: Next.js (0.0.0.0:3003)",
+			"type": "shell",
+			"command": "npm",
+			"args": [
+				"run",
+				"dev",
+				"--",
+				"-p",
+				"3003",
+				"-H",
+				"0.0.0.0"
+			],
+			"isBackground": true,
+			"group": "build"
+		},
+		{
+			"label": "Run Jest tests",
+			"type": "shell",
+			"command": "npm",
+			"args": [
+				"run",
+				"test"
+			],
+			"group": "test"
+		},
+		{
+			"label": "Run Jest tests",
+			"type": "shell",
+			"command": "npm",
+			"args": [
+				"run",
+				"test"
+			],
+			"group": "test"
+		},
+		{
+			"label": "Run Jest tests",
+			"type": "shell",
+			"command": "npm",
+			"args": [
+				"run",
+				"test"
+			],
+			"group": "test"
+		},
+		{
+			"label": "TypeScript: Watch & Show Errors",
+			"type": "shell",
+			"command": "npx",
+			"args": [
+				"tsc",
+				"--watch",
+				"--noEmit"
+			],
+			"isBackground": true,
+			"problemMatcher": [
+				"$tsc-watch"
+			],
+			"group": "build"
+		},
+		{
+			"label": "ESLint: Watch & Show Errors",
+			"type": "shell",
+			"command": "npx",
+			"args": [
+				"eslint",
+				".",
+				"--ext",
+				".js,.jsx,.ts,.tsx",
+				"--watch"
+			],
+			"isBackground": true,
+			"problemMatcher": [
+				"$eslint-stylish"
+			],
+			"group": "build"
+		},
+		{
+			"label": "Jest: Watch & Show Errors",
+			"type": "shell",
+			"command": "npx",
+			"args": [
+				"jest",
+				"--watchAll"
+			],
+			"isBackground": true,
+			"problemMatcher": [
+				"$jest"
+			],
+			"group": "test"
+		},
+		{
+			"label": "ESLint: Run Once",
+			"type": "shell",
+			"command": "npx",
+			"args": [
+				"eslint",
+				".",
+				"--ext",
+				".js,.jsx,.ts,.tsx"
+			],
+			"isBackground": false,
+			"problemMatcher": [
+				"$eslint-stylish"
+			],
+			"group": "build"
+		}
+	]
+}

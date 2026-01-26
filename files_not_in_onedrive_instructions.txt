@@ -1,0 +1,3 @@
+Your list of files not in OneDrive has been saved to C:\Users\finan\files_not_in_onedrive.txt.
+
+Would you like to view this list, move your project, or perform another action?

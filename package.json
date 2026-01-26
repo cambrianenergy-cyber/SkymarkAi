@@ -1,0 +1,39 @@
+{
+  "name": "skyymarkai",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev -p 3003 -H 0.0.0.0",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
+    "test": "jest"
+  },
+  "dependencies": {
+    "@firebase/app": "^0.14.6",
+    "@google-cloud/secret-manager": "^6.1.1",
+    "axios": "^1.13.3",
+    "firebase": "^12.7.0",
+    "firebase-admin": "^13.6.0",
+    "lucide-react": "^0.563.0",
+    "marked": "^17.0.1",
+    "next": "^16.1.5",
+    "openai": "^6.16.0",
+    "react": "latest",
+    "react-dom": "latest",
+    "react-modal": "^3.16.3",
+    "react-toastify": "^11.0.5",
+    "stripe": "^20.2.0",
+    "zod": "^4.3.6"
+  },
+  "devDependencies": {
+    "@types/jest": "^30.0.0",
+    "@types/node": "latest",
+    "@types/react": "latest",
+    "eslint": "latest",
+    "jest": "latest",
+    "ts-jest": "^29.4.6",
+    "typescript": "latest",
+    "vitest": "^4.0.18"
+  }
+}
