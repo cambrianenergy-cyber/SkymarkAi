@@ -1,35 +1,37 @@
 import { NextResponse } from "next/server";
-import admin from "firebase-admin";
 import crypto from "crypto";
-import { db } from "@/lib/firebaseAdmin";
+// Adjust the following imports to match your actual project structure and exports
+import { firebaseAdmin } from "@/lib/firebaseAdmin";
+// Adjust the following import path to the correct location of requireSession in your project:
 import { requireSession } from "@/lib/auth/requireSession";
-import { assertWorkspaceAdminOrOwner } from "@/lib/auth/workspaceAccess";
+
+const db = firebaseAdmin.firestore();
 
 const PROVIDER_CONFIG = {
-    snapchat: {
-      clientId: process.env.SNAPCHAT_CLIENT_ID,
-      redirectUri: process.env.SNAPCHAT_REDIRECT_URI,
-      scopes: "snapchat-marketing-api,openid,profile,email",
-      authUrl: "https://accounts.snapchat.com/login/oauth2/authorize",
-    },
-    nextdoor: {
-      clientId: process.env.NEXTDOOR_CLIENT_ID,
-      redirectUri: process.env.NEXTDOOR_REDIRECT_URI,
-      scopes: "public_profile,email,openid",
-      authUrl: "https://api.nextdoor.com/oauth/v2/authorize",
-    },
-    angi: {
-      clientId: process.env.ANGI_CLIENT_ID,
-      redirectUri: process.env.ANGI_REDIRECT_URI,
-      scopes: "profile,email,openid",
-      authUrl: "https://api.angi.com/oauth2/authorize",
-    },
-    threads: {
-      clientId: process.env.THREADS_CLIENT_ID,
-      redirectUri: process.env.THREADS_REDIRECT_URI,
-      scopes: "basic_profile,email,openid",
-      authUrl: "https://www.threads.net/oauth/authorize",
-    },
+  snapchat: {
+    clientId: process.env.SNAPCHAT_CLIENT_ID,
+    redirectUri: process.env.SNAPCHAT_REDIRECT_URI,
+    scopes: "snapchat-marketing-api,openid,profile,email",
+    authUrl: "https://accounts.snapchat.com/login/oauth2/authorize",
+  },
+  nextdoor: {
+    clientId: process.env.NEXTDOOR_CLIENT_ID,
+    redirectUri: process.env.NEXTDOOR_REDIRECT_URI,
+    scopes: "public_profile,email,openid",
+    authUrl: "https://api.nextdoor.com/oauth/v2/authorize",
+  },
+  angi: {
+    clientId: process.env.ANGI_CLIENT_ID,
+    redirectUri: process.env.ANGI_REDIRECT_URI,
+    scopes: "profile,email,openid",
+    authUrl: "https://api.angi.com/oauth2/authorize",
+  },
+  threads: {
+    clientId: process.env.THREADS_CLIENT_ID,
+    redirectUri: process.env.THREADS_REDIRECT_URI,
+    scopes: "basic_profile,email,openid",
+    authUrl: "https://www.threads.net/oauth/authorize",
+  },
   meta: {
     clientId: process.env.META_CLIENT_ID,
     redirectUri: process.env.META_REDIRECT_URI,
@@ -62,8 +64,9 @@ const PROVIDER_CONFIG = {
   },
 };
 
-  const session = await requireSession(req);
-  const { workspaceId, platform, codeChallenge } = await req.json();
+export async function POST(request: Request) {
+  const session = await requireSession(request);
+  const { workspaceId, platform, codeChallenge } = await request.json();
   const validPlatforms = [
     "meta", "linkedin", "x", "tiktok", "youtube",
     "snapchat", "nextdoor", "angi", "threads"
@@ -71,7 +74,7 @@ const PROVIDER_CONFIG = {
   if (!workspaceId || !platform || !validPlatforms.includes(platform)) {
     return NextResponse.json({ ok: false, error: "Invalid platform or workspaceId" }, { status: 400 });
   }
-  const cfg = PROVIDER_CONFIG[platform];
+  const cfg = PROVIDER_CONFIG[platform as keyof typeof PROVIDER_CONFIG];
   const state = crypto.randomBytes(16).toString("hex");
 
   // Create connect attempt doc in Firestore
@@ -88,19 +91,21 @@ const PROVIDER_CONFIG = {
   }
   await db.collection("integration_connect_attempts").doc(state).set(attempt);
 
-  let url;
+  let url: string | undefined;
+  // Helper to ensure string for encodeURIComponent
+  const safe = (v: string | undefined) => typeof v === "string" ? v : "";
   if (platform === "meta") {
-    url = `${cfg.authUrl}?client_id=${cfg.clientId}&redirect_uri=${encodeURIComponent(cfg.redirectUri)}&state=${state}&scope=${cfg.scopes}`;
+    url = `${cfg.authUrl}?client_id=${cfg.clientId}&redirect_uri=${encodeURIComponent(safe(cfg.redirectUri))}&state=${state}&scope=${safe(cfg.scopes)}`;
   } else if (platform === "linkedin" || platform === "x" || platform === "angi" || platform === "threads") {
-    url = `${cfg.authUrl}?response_type=code&client_id=${cfg.clientId}&redirect_uri=${encodeURIComponent(cfg.redirectUri)}&scope=${encodeURIComponent(cfg.scopes)}&state=${state}`;
+    url = `${cfg.authUrl}?response_type=code&client_id=${cfg.clientId}&redirect_uri=${encodeURIComponent(safe(cfg.redirectUri))}&scope=${encodeURIComponent(safe(cfg.scopes))}&state=${state}`;
   } else if (platform === "tiktok") {
-    url = `${cfg.authUrl}?client_key=${cfg.clientId}&redirect_uri=${encodeURIComponent(cfg.redirectUri)}&scope=${encodeURIComponent(cfg.scopes)}&state=${state}&response_type=code`;
+    url = `${cfg.authUrl}?client_key=${cfg.clientId}&redirect_uri=${encodeURIComponent(safe(cfg.redirectUri))}&scope=${encodeURIComponent(safe(cfg.scopes))}&state=${state}&response_type=code`;
   } else if (platform === "youtube") {
-    url = `${cfg.authUrl}?client_id=${cfg.clientId}&redirect_uri=${encodeURIComponent(cfg.redirectUri)}&response_type=code&scope=${encodeURIComponent(cfg.scopes)}&state=${state}&access_type=offline&prompt=consent`;
+    url = `${cfg.authUrl}?client_id=${cfg.clientId}&redirect_uri=${encodeURIComponent(safe(cfg.redirectUri))}&response_type=code&scope=${encodeURIComponent(safe(cfg.scopes))}&state=${state}&access_type=offline&prompt=consent`;
   } else if (platform === "snapchat") {
-    url = `${cfg.authUrl}?client_id=${cfg.clientId}&redirect_uri=${encodeURIComponent(cfg.redirectUri)}&response_type=code&scope=${encodeURIComponent(cfg.scopes)}&state=${state}`;
+    url = `${cfg.authUrl}?client_id=${cfg.clientId}&redirect_uri=${encodeURIComponent(safe(cfg.redirectUri))}&response_type=code&scope=${encodeURIComponent(safe(cfg.scopes))}&state=${state}`;
   } else if (platform === "nextdoor") {
-    url = `${cfg.authUrl}?client_id=${cfg.clientId}&redirect_uri=${encodeURIComponent(cfg.redirectUri)}&response_type=code&scope=${encodeURIComponent(cfg.scopes)}&state=${state}`;
+    url = `${cfg.authUrl}?client_id=${cfg.clientId}&redirect_uri=${encodeURIComponent(safe(cfg.redirectUri))}&response_type=code&scope=${encodeURIComponent(safe(cfg.scopes))}&state=${state}`;
   }
   return NextResponse.json({ ok: true, url });
 }

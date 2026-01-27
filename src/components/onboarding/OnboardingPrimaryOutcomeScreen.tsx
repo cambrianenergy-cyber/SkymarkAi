@@ -2,6 +2,11 @@ import { useState } from "react";
 import { useAllowedTools } from "../../hooks/useAllowedTools";
 import { NextButton } from "../../hooks/NextButton";
 
+type OnboardingPrimaryOutcomeScreenProps = {
+  workspaceId: string;
+  onboarding: { currentStep: number };
+};
+
 const outcomes = [
   "Customer support + inbox automation",
   "Sales follow-up + lead nurturing",
@@ -21,6 +26,7 @@ const tools = [
   "Custom API",
 ];
 
+export function OnboardingPrimaryOutcomeScreen({ workspaceId, onboarding }: OnboardingPrimaryOutcomeScreenProps) {
   const [primaryOutcome, setPrimaryOutcome] = useState("");
   const [selectedTools, setSelectedTools] = useState<string[]>([]);
   const [err, setErr] = useState<string | null>(null);
@@ -89,7 +95,7 @@ const tools = [
         </div>
       </div>
       {err && <div className="text-red-600 text-sm mt-2">{err}</div>}
-      <NextButton workspaceId={workspaceId} currentStep={onboarding.currentStep} />
+      <NextButton workspaceId={workspaceId} currentStep={onboarding.currentStep.toString()} />
     </form>
   );
 }

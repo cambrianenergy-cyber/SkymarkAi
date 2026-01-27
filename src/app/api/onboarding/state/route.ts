@@ -14,8 +14,13 @@ export async function GET(request: Request) {
     const docRef = db().collection('onboarding_states').doc(userId);
     const snap = await docRef.get();
     if (!snap.exists) {
-      // Default state if not found
-      return NextResponse.json({ state: 'profile' });
+      // Default state if not found, must match OnboardingStateSchema
+      return NextResponse.json({
+        state: 'profile',
+        updatedAt: new Date().toISOString(),
+        userId,
+        workspaceId
+      });
     }
     const data = snap.data();
     const parsed = OnboardingStateSchema.safeParse({ ...data, userId, workspaceId });

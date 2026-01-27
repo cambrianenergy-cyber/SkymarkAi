@@ -1,5 +1,5 @@
 // Firestore type for social media connection
-default export interface SocialConnection {
+export default interface SocialConnection {
   id: string; // doc id: `${userId}_${platform}`
   userId: string;
   workspaceId: string;

@@ -16,6 +16,12 @@ const OUTCOMES = [
 
 const TOOLS = ["gmail", "outlook", "slack", "teams", "hubspot", "salesforce", "notion", "airtable", "gdrive", "dropbox", "zapier", "make", "custom_api"];
 
+type PrimaryOutcomeStepProps = {
+  workspaceId: string;
+  onboarding: WorkspaceOnboardingDoc;
+};
+
+export default function PrimaryOutcomeStep(props: PrimaryOutcomeStepProps) {
   const { workspaceId, onboarding } = props;
   const { allowedTools, loading: allowedLoading } = useAllowedTools(workspaceId);
 
@@ -81,7 +87,7 @@ const TOOLS = ["gmail", "outlook", "slack", "teams", "hubspot", "salesforce", "n
               key={t}
               onClick={() => toggleTool(t)}
               className={`border rounded px-3 py-2 ${tools.includes(t) ? "bg-black text-white" : ""}`}
-              disabled={allowedTools && !allowedTools.includes(t)}
+              disabled={allowedTools ? !allowedTools.includes(t) : undefined}
               title={allowedTools && !allowedTools.includes(t) ? "Not allowed by your policy" : undefined}
             >
               {t}

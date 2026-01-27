@@ -3,9 +3,11 @@ import { collection, query, where, getDocs, orderBy, limit, Timestamp } from 'fi
 import { db } from '@lib/firebase';
 import { SystemHealth } from '@/lib/types/agentAudit';
 
-export async function GET(req: Request, { params }: { params: { workspaceId: string } }) {
+import { NextRequest } from 'next/server';
+
+export async function GET(req: NextRequest, { params }: { params: Promise<{ workspaceId: string }> }) {
   try {
-    const workspaceId = params.workspaceId;
+    const { workspaceId } = await params;
 
     // Check database connectivity
     const dbOk = await checkDatabaseHealth();

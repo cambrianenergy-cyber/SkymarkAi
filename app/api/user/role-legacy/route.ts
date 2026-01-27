@@ -1,13 +1,15 @@
-import { NextResponse, NextRequest } from "next/server";
+import { NextResponse } from "next/server";
 import { db } from "@lib/firebaseAdmin";
 import { requireAuth } from "@lib/requireAuth";
 
 /**
- * GET /api/user/role?userId=<uid>&workspaceId=<ws>
+ * GET /api/user/role-legacy?userId=<uid>&workspaceId=<ws>
  * Returns:
  * - global role info (founder claim if you use it)
  * - workspace role (owner/admin/member/viewer) if workspaceId provided
  */
+import type { NextRequest } from "next/server";
+
 export async function GET(req: NextRequest) {
   try {
     const url = new URL(req.url);

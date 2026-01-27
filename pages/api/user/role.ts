@@ -10,3 +10,14 @@
 
 
 
+import type { NextApiRequest, NextApiResponse } from "next";
+
+export default function handler(req: NextApiRequest, res: NextApiResponse) {
+	// TODO: Implement actual logic
+	res.status(200).json({ message: "OK" });
+}
+
+
+
+
+
