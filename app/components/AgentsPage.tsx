@@ -3,7 +3,7 @@
 import React, { useMemo, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 
-type Plan = "starter" | "pro" | "elite" | "agency" | "founder";
+type Plan = "accelerate" | "dominion" | "sovereign" | "founder";
 type AgentCategory = "sales" | "marketing" | "ops" | "support" | "admin";
 type PriceModel = "included" | "addon";
 type AgentStatus = "enabled" | "disabled";
@@ -25,10 +25,9 @@ type AgentDef = {
 };
 
 const PLAN_LIMITS: Record<Plan, { maxAgents: number }> = {
-  starter: { maxAgents: 3 },
-  pro: { maxAgents: 8 },
-  elite: { maxAgents: 15 },
-  agency: { maxAgents: 30 },
+  accelerate: { maxAgents: 3 },
+  dominion: { maxAgents: 5 },
+  sovereign: { maxAgents: 7 },
   founder: { maxAgents: 9999 },
 };
 
@@ -41,7 +40,7 @@ const DEFAULT_LIBRARY: AgentDef[] = [
     category: "sales",
     priceModel: "included",
     priceCents: 0,
-    availableInPlans: ["starter", "pro", "elite", "agency", "founder"],
+    availableInPlans: ["accelerate", "dominion", "sovereign", "founder"],
     status: "enabled",
     label: "Core",
     duty: "Qualify leads and route.",
@@ -54,7 +53,7 @@ const DEFAULT_LIBRARY: AgentDef[] = [
     category: "ops",
     priceModel: "included",
     priceCents: 0,
-    availableInPlans: ["starter", "pro", "elite", "agency", "founder"],
+    availableInPlans: ["accelerate", "dominion", "sovereign", "founder"],
     status: "enabled",
     label: "Core",
     duty: "Keep pipeline moving.",
@@ -67,7 +66,7 @@ const DEFAULT_LIBRARY: AgentDef[] = [
     category: "marketing",
     priceModel: "addon",
     priceCents: 1900,
-    availableInPlans: ["pro", "elite", "agency", "founder"],
+    availableInPlans: ["dominion", "sovereign", "founder"],
     status: "enabled",
     label: "Add-on",
     duty: "Repurpose content at scale.",
@@ -80,7 +79,7 @@ const DEFAULT_LIBRARY: AgentDef[] = [
     category: "support",
     priceModel: "addon",
     priceCents: 2900,
-    availableInPlans: ["elite", "agency", "founder"],
+    availableInPlans: ["sovereign", "founder"],
     status: "enabled",
     label: "Premium",
     duty: "Keep inbox zero and move deals forward.",
@@ -104,10 +103,10 @@ const DEFAULT_LIBRARY: AgentDef[] = [
 ];
 
 function clampPlan(input: string | null): Plan {
-  if (!input) return "starter";
+  if (!input) return "accelerate";
   const v = input.toLowerCase();
-  if (v === "starter" || v === "pro" || v === "elite" || v === "agency" || v === "founder") return v;
-  return "starter";
+  if (v === "accelerate" || v === "dominion" || v === "sovereign" || v === "founder") return v as Plan;
+  return "accelerate";
 }
 
 export default function AgentsPage() {
@@ -189,7 +188,7 @@ export default function AgentsPage() {
       category: "ops",
       priceModel: "included",
       priceCents: 0,
-      availableInPlans: [plan, "elite", "agency", "founder"],
+      availableInPlans: [plan, "sovereign", "founder"],
       status: "enabled",
       label: "Custom",
       duty: "Custom defined duty.",

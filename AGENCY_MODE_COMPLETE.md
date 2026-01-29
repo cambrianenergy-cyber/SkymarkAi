@@ -191,7 +191,7 @@ AGENCY_MODE_COMPLETE.md       # This file
 {
   name: string,
   ownerUserId: string,
-  plan: "free" | "pro" | "enterprise",
+  plan: "free" | "accelerate" | "dominion" | "sovereign" | "founder",
   status: "active" | "suspended",
   createdAt: timestamp,
   updatedAt: timestamp

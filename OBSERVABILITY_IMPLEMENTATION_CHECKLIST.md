@@ -273,6 +273,7 @@ Shows all steps in order
 - System Health metrics update as agents execute
 - Golden Workflow runs without error
 
+
 ✅ **Proven to work when:**
 - Run golden workflow
 - See 3 agent runs in Agent Activity
@@ -280,6 +281,31 @@ Shows all steps in order
 - System Health shows success rate and latency
 - Channel Verification shows all connected
 - You can trace execution via correlationId
+
+---
+
+## Troubleshooting & FAQ
+
+**Q: Why don't I see agent runs in the dashboard?**
+- Ensure logging is correctly imported and called in the agent runner.
+- Check Firestore rules and API permissions.
+
+**Q: Why are some runs missing artifact IDs?**
+- Make sure outputs are passed to `logAgentRunSuccess`.
+- Check agent logic for correct result formatting.
+
+**Q: How do I debug failed runs?**
+- Review error details in `/app/agent-activity`.
+- Check stack trace and error code in the log entry.
+
+**Q: Metrics are not updating in System Health?**
+- Confirm backend jobs and API endpoints are running.
+- Check for errors in the orchestrator logs.
+
+**Q: How do I verify integration connectivity?**
+- Use `/app/channel-verification` and run the test for each channel.
+
+For more help, see the full documentation in `AGENT_OBSERVABILITY.md` or contact support.
 
 ---
 

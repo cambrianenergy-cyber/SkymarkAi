@@ -1,6 +1,33 @@
 import { NextResponse } from 'next/server';
 import { db } from '@/lib/firebase';
-import { OnboardingStateSchema } from '@/lib/firestoreTypes';
+
+// New onboarding schema version
+const ONBOARDING_VERSION = 1;
+
+function migrateToNewSchema(data: any) {
+  // If already in new format, return as is
+  if (data && data.version === ONBOARDING_VERSION && data.steps) return data;
+  // Migrate old format to new
+  const now = new Date();
+  let steps: Record<string, any> = {};
+  if (Array.isArray(data?.steps)) {
+    for (const s of data.steps) {
+      steps[s.key || s.stepId || 'unknown'] = {
+        status: s.completed ? 'done' : 'todo',
+        verified: !!s.completed,
+        verifiedAt: s.completed ? (s.completedAt ? new Date(s.completedAt) : now) : null,
+        meta: s
+      };
+    }
+  }
+  return {
+    version: ONBOARDING_VERSION,
+    completed: !!data?.completed,
+    completedAt: data?.completedAt ? new Date(data.completedAt) : null,
+    lastEvaluatedAt: now,
+    steps,
+  };
+}
 
 // GET /api/onboarding/state?userId=...&workspaceId=...
 export async function GET(request: Request) {
@@ -11,23 +38,40 @@ export async function GET(request: Request) {
     return NextResponse.json({ error: 'Missing userId or workspaceId' }, { status: 400 });
   }
   try {
-    const docRef = db().collection('onboarding_states').doc(userId);
-    const snap = await docRef.get();
-    if (!snap.exists) {
-      // Default state if not found, must match OnboardingStateSchema
-      return NextResponse.json({
-        state: 'profile',
-        updatedAt: new Date().toISOString(),
-        userId,
-        workspaceId
-      });
+    // New canonical path
+    const newDocRef = db()
+      .collection('workspaces')
+      .doc(workspaceId)
+      .collection('members')
+      .doc(userId)
+      .collection('onboarding')
+      .doc('state');
+    const newSnap = await newDocRef.get();
+    if (newSnap.exists) {
+      const data = newSnap.data();
+      return NextResponse.json({ ...data, userId, workspaceId });
     }
-    const data = snap.data();
-    const parsed = OnboardingStateSchema.safeParse({ ...data, userId, workspaceId });
-    if (!parsed.success) {
-      return NextResponse.json({ error: 'Invalid onboarding state' }, { status: 500 });
+    // Try old path for migration
+    const oldDocRef = db().collection('onboarding_states').doc(`${userId}_${workspaceId}`);
+    const oldSnap = await oldDocRef.get();
+    if (oldSnap.exists) {
+      const oldData = oldSnap.data();
+      const migrated = migrateToNewSchema(oldData);
+      await newDocRef.set(migrated);
+      await oldDocRef.delete();
+      return NextResponse.json({ ...migrated, userId, workspaceId, migrated: true });
     }
-    return NextResponse.json({ state: parsed.data.state });
+    // Default state if not found
+    const now = new Date();
+    const defaultState = {
+      version: ONBOARDING_VERSION,
+      completed: false,
+      completedAt: null,
+      lastEvaluatedAt: now,
+      steps: {},
+    };
+    await newDocRef.set(defaultState);
+    return NextResponse.json({ ...defaultState, userId, workspaceId, initialized: true });
   } catch (err) {
     return NextResponse.json({ error: 'Failed to fetch onboarding state' }, { status: 500 });
   }
@@ -37,18 +81,34 @@ export async function GET(request: Request) {
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { userId, workspaceId, state } = body;
-    if (!userId || !workspaceId || !state) {
+    const { userId, workspaceId, onboarding } = body;
+    if (!userId || !workspaceId || !onboarding) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
     }
+    // Validate and fill schema
+    const now = new Date();
     const onboardingState = {
-      userId,
-      workspaceId,
-      state,
-      updatedAt: new Date().toISOString(),
+      version: ONBOARDING_VERSION,
+      completed: !!onboarding.completed,
+      completedAt: onboarding.completedAt ? new Date(onboarding.completedAt) : null,
+      lastEvaluatedAt: onboarding.lastEvaluatedAt ? new Date(onboarding.lastEvaluatedAt) : now,
+      steps: onboarding.steps || {},
     };
-    OnboardingStateSchema.parse(onboardingState);
-    await db().collection('onboarding_states').doc(userId).set(onboardingState);
+    // Write to new canonical path
+    const newDocRef = db()
+      .collection('workspaces')
+      .doc(workspaceId)
+      .collection('members')
+      .doc(userId)
+      .collection('onboarding')
+      .doc('state');
+    await newDocRef.set(onboardingState);
+    // Delete old path if exists
+    const oldDocRef = db().collection('onboarding_states').doc(`${userId}_${workspaceId}`);
+    const oldSnap = await oldDocRef.get();
+    if (oldSnap.exists) {
+      await oldDocRef.delete();
+    }
     return NextResponse.json({ success: true });
   } catch (err) {
     return NextResponse.json({ error: 'Failed to update onboarding state' }, { status: 500 });

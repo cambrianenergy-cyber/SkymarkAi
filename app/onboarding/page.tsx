@@ -1,27 +1,31 @@
-// ENTRY GATE: /onboarding
-import { redirect } from 'next/navigation';
-import { getOnboardingState } from '../../lib/onboardingState';
+"use client";
+import { useEffect, useState } from 'react';
 
-export default async function OnboardingEntry() {
-  // Server-side: check onboarding state and redirect
-  const state = await getOnboardingState();
-  switch (state) {
-    case 'profile':
-      redirect('/onboarding/profile');
-    case 'workspace':
-      redirect('/onboarding/workspace');
-    case 'team':
-      redirect('/onboarding/team');
-    case 'connect':
-      redirect('/onboarding/connect');
-    case 'agents':
-      redirect('/onboarding/agents');
-    case 'first_run':
-      redirect('/onboarding/first_run');
-    case 'done':
-      redirect('/dashboard');
-    default:
-      redirect('/onboarding/profile');
-  }
-  return null;
+export default function OnboardingPage() {
+  const [onboarding, setOnboarding] = useState('');
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
+
+  useEffect(() => {
+    fetch('/api/onboarding/state')
+      .then(res => res.json())
+      .then(data => {
+        setOnboarding(data.onboarding);
+        setLoading(false);
+      })
+      .catch(() => {
+        setError('Failed to load onboarding state');
+        setLoading(false);
+      });
+  }, []);
+
+  if (loading) return <div>Loading onboarding status...</div>;
+  if (error) return <div>{error}</div>;
+
+  return (
+    <div style={{ maxWidth: 400, margin: '2rem auto', padding: 24, border: '1px solid #eee', borderRadius: 8 }}>
+      <h1>Onboarding Status</h1>
+      <p>Current state: <b>{onboarding}</b></p>
+    </div>
+  );
 }

@@ -1,28 +1,96 @@
 # 🧠 Agent Tier System Implementation
 
+## 🗺️ High-Level Agent Architecture & Data Flow
+
+```
+User Action
+   │
+   ▼
+Orchestrator (lib/orchestratorProdigy.ts)
+   │
+   ├─ Analyzes task, selects agents
+   ├─ Shows recommendations (AgentRecommendationPopup.tsx)
+   │
+   ▼
+Agent Runners (lib/agentRunners/*.ts)
+   ├─ Algorithm_Hunter.ts
+   ├─ Brand_Voice_Guardian.ts
+   ├─ Campaign_Director.ts
+   ├─ Competitor_Watchdog.ts
+   ├─ Content_Creator.ts
+   ├─ Copywriter.ts
+   ├─ Engagement_Analyst.ts
+   ├─ Hashtag_SEO.ts
+   ├─ Scheduling_Master.ts
+   ├─ Trend_Hunter.ts
+   ├─ ... (see full list below)
+   │
+   ▼
+Firestore (agent_runs, outputs)
+   │
+   ▼
+Dashboards (Activity, Health, Channel Verification)
+```
+
+### All Agent Runner Files (lib/agentRunners/)
+
+- Algorithm_Hunter.ts
+- Brand_Voice_Guardian.ts
+- Campaign_Director.ts
+- Competitor_Watchdog.ts
+- Content_Creator.ts
+- Copywriter.ts
+- Engagement_Analyst.ts
+- Hashtag_SEO.ts
+- Scheduling_Master.ts
+- Trend_Hunter.ts
+- Ad_Manager.ts
+- Acquisition_Bot.ts
+- Outreach_Bot.ts
+- Outbound_Prospector.ts
+- OpenHouse_Bot.ts
+- Onboarding_Sequence.ts
+- Onboarding_Manager.ts
+- Reporting_Agent.ts
+- Reminder_Sender.ts
+- Onboarding_Bot.ts
+- Meeting_Booker.ts
+- Loyalty_Program_Bot.ts
+- Listing_Optimizer.ts
+- Lead_Nurturer.ts
+- Intake_Form_Bot.ts
+- Gift_Sender.ts
+- Followup_Sequencer.ts
+- Followup_Scheduler.ts
+...and more as added.
+
+> All agent runners are referenced here and should be included in tier/plan logic as appropriate.
+
 ## Overview
 Uqentra AI now has a tiered AI agent system where different subscription plans unlock different levels of intelligence and automation.
 
 ---
 
-## 🎯 The Three Tiers
 
-### 🟢 Starter Plan — "Get It Done" AI
-**Price:** $49/month  
+## 🎯 The Three Plans
+
+### 🟢 Accelerate Plan
+**Price:** $499/month  
 **Focus:** Execution  
+**Agents Unlocked:** 3  
 **Intelligence Level:** 🧠
 
-#### Included Agents (5 total)
+#### Included Agents (3 unlocked)
 - ✅ **Copywriter** — Writes posts, captions, ads, CTAs
 - ✅ **Content Creator** (Visual Designer) — Creative direction, prompts, visual specs
 - ✅ **Scheduling Master** — Posting cadence + scheduling logic
 
-#### What Starter Can Do
+#### What Accelerate Can Do
 - ✅ Create content
 - ✅ Post content
 - ✅ Basic message responses
 
-#### What Starter Cannot Do
+#### What Accelerate Cannot Do
 - ❌ Strategic campaign planning
 - ❌ Competitive analysis
 - ❌ Deep analytics
@@ -32,22 +100,21 @@ Uqentra AI now has a tiered AI agent system where different subscription plans u
 
 ---
 
-### 🔵 Pro Plan — "Grow Smarter" AI
-**Price:** $149/month  
+### 🔵 Dominion Plan
+**Price:** $999/month  
 **Focus:** Strategy + Optimization  
+**Agents Unlocked:** 5  
 **Intelligence Level:** 🧠🧠
 
-#### Included Agents (11 total)
-Everything in Starter, plus:
+#### Included Agents (5 unlocked)
+Everything in Accelerate, plus:
 - ✅ **Campaign Director** — Builds campaign plans, aligns content to goals
 - ✅ **Trend Hunter** — Finds trends, hooks, viral angles
 - ✅ **Competitor Watchdog** — Analyzes competitors, extracts insights
 - ✅ **Engagement Analyst** — Tracks performance, recommends optimizations
 - ✅ **Brand Voice Guardian** — Enforces tone, clarity, consistency
-- ✅ **Hashtag/SEO Optimizer** — Improves discoverability
-- ✅ **Algorithm Hunter** — Studies algorithms, identifies best posting times
 
-#### What Pro Unlocks
+#### What Dominion Unlocks
 - ✅ Campaign-level thinking
 - ✅ Better reach and conversions
 - ✅ Smarter content decisions
@@ -55,7 +122,7 @@ Everything in Starter, plus:
 - ✅ Trend analysis
 - ✅ Brand consistency
 
-#### What Pro Cannot Do
+#### What Dominion Cannot Do
 - ❌ Multi-client scale operations
 - ❌ Advanced automation workflows
 
@@ -63,13 +130,14 @@ Everything in Starter, plus:
 
 ---
 
-### 🔴 Agency Plan — "Scale & Automate" AI
-**Price:** $399/month  
+### 🔴 Sovereign Plan
+**Price:** $1,999/month  
 **Focus:** Automation + Scale  
+**Agents Unlocked:** 7  
 **Intelligence Level:** 🧠🧠🧠
 
-#### Included Agents (19+ total)
-Everything in Pro, plus:
+#### Included Agents (7 unlocked)
+Everything in Dominion, plus:
 - ✅ **Repurpose Engine** ⭐ — Turns 1 asset into 10–20 pieces
 - ✅ **Inbox Triage Agent** — Categorizes messages, flags leads
 - ✅ **Lead Scoring + Follow-Up Agent** — Auto sequences, push to close
@@ -77,9 +145,8 @@ Everything in Pro, plus:
 - ✅ **Paid Ads Strategist** — Ad angles, creatives, testing logic
 - ✅ **Analytics → Action Agent** — Autopilot optimization
 - ✅ **Client Reporting Agent** — Agency-grade deliverables
-- ✅ **Workflow Builder Agent** — Rapid client onboarding
 
-#### What Agency Becomes
+#### What Sovereign Becomes
 - ✅ A marketing operating system
 - ✅ A client delivery engine
 - ✅ A revenue automation stack
@@ -90,13 +157,15 @@ Everything in Pro, plus:
 
 ---
 
-## 📊 Clean Tier Comparison
+## 📊 Clean Plan Comparison
 
-| Tier | Focus | Intelligence | Agent Count | Price |
-|------|-------|-------------|-------------|-------|
-| **Starter** | Execution | 🧠 | 5 | $49/mo |
-| **Pro** | Strategy + Optimization | 🧠🧠 | 11 | $149/mo |
-| **Agency** | Automation + Scale | 🧠🧠🧠 | 19+ | $399/mo |
+| Plan | Focus | Intelligence | Agents Unlocked | Price |
+|------|-------|-------------|-----------------|-------|
+| **Accelerate** | Execution | 🧠 | 3 | $499/mo |
+| **Dominion** | Strategy + Optimization | 🧠🧠 | 5 | $999/mo |
+| **Sovereign** | Automation + Scale | 🧠🧠🧠 | 7 | $1,999/mo |
+
+> All additional agents are available as subscription add-ons. Pricing for add-on agents will be set separately.
 
 ---
 

@@ -1,3 +1,18 @@
+// Onboarding subcollection under workspace members
+function isWorkspaceMember(workspaceId, uid) {
+  // Checks if the user is a member of the workspace
+  return request.auth != null &&
+    exists(/databases/$(database)/documents/workspace_members/$(uid + '_' + workspaceId)) &&
+    get(/databases/$(database)/documents/workspace_members/$(uid + '_' + workspaceId)).data.status == 'active';
+}
+function isServer() {
+  // Only allow server (service account) writes
+  return request.auth != null && request.auth.token.firebase.sign_in_provider == 'custom';
+}
+match /workspaces/{workspaceId}/members/{uid}/onboarding/{docId} {
+  allow read: if isWorkspaceMember(workspaceId, uid);
+  allow write: if isServer(); // 🔒 no client writes
+}
 // Steps subcollection under workflow_runs: Only admins can read/write
 match /workflow_runs/{runId}/steps/{stepId} {
   allow read, create, update: if isAdmin();

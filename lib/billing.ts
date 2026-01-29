@@ -115,38 +115,38 @@ export function isFounder(userId: string): boolean {
 
 export function getPlanLimits(plan: string): PlanLimits {
   switch (plan) {
-      case "accelerate":
+    case "accelerate":
       return {
-        activeAgents: 5,
+        activeAgents: 3,
         workflowRuns: 100,
         templateInstalls: 10,
         seats: 2,
-          allowedAgentTypes: ACCELERATE_AGENTS,
+        allowedAgentTypes: ACCELERATE_AGENTS,
       };
-      case "dominion":
+    case "dominion":
       return {
-        activeAgents: 20,
+        activeAgents: 5,
         workflowRuns: 1000,
         templateInstalls: -1, // Unlimited
         seats: 10,
-          allowedAgentTypes: DOMINION_AGENTS,
+        allowedAgentTypes: DOMINION_AGENTS,
       };
-      case "sovereign":
+    case "sovereign":
       return {
-        activeAgents: -1, // Unlimited
+        activeAgents: 7,
         workflowRuns: -1, // Unlimited
         templateInstalls: -1, // Unlimited
         seats: -1, // Unlimited
-          allowedAgentTypes: SOVEREIGN_AGENTS,
+        allowedAgentTypes: SOVEREIGN_AGENTS,
       };
-      case "founder":
-        return {
-          activeAgents: -1,
-          workflowRuns: -1,
-          templateInstalls: -1,
-          seats: -1,
-          allowedAgentTypes: [...SOVEREIGN_AGENTS], // Founder gets everything
-        };
+    case "founder":
+      return {
+        activeAgents: -1,
+        workflowRuns: -1,
+        templateInstalls: -1,
+        seats: -1,
+        allowedAgentTypes: [...SOVEREIGN_AGENTS], // Founder gets everything
+      };
     default: // free
       return DEFAULT_LIMITS;
   }

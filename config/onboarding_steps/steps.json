@@ -1,0 +1,32 @@
+[
+  {
+    "stepId": "verify_email",
+    "title": "Verify your email",
+    "order": 1,
+    "required": true,
+    "verificationRule": {
+      "type": "auth_email_verified"
+    }
+  },
+  {
+    "stepId": "profile_complete",
+    "title": "Complete your profile",
+    "order": 2,
+    "required": true,
+    "verificationRule": {
+      "type": "firestore_field",
+      "path": "members/{uid}",
+      "field": "profileComplete",
+      "equals": true
+    }
+  },
+  {
+    "stepId": "first_workflow_run",
+    "title": "Run your first workflow",
+    "order": 4,
+    "required": true,
+    "verificationRule": {
+      "type": "workflow_run_success"
+    }
+  }
+]

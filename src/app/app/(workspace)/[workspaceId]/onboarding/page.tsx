@@ -6,7 +6,7 @@ import { OnboardingScreen } from "@/components/onboarding/OnboardingScreen";
 
 export default function OnboardingPage() {
   const params = useParams<{ workspaceId: string }>();
-  const workspaceId = params.workspaceId;
+  const workspaceId = params?.workspaceId ?? "";
 
   const { data, loading } = useWorkspaceOnboarding(workspaceId);
 
