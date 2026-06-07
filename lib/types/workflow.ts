@@ -1,5 +1,12 @@
 import { Timestamp } from "firebase/firestore";
 
+// Minimal WorkflowRun type for client-safe usage
+export type ClientWorkflowRun = {
+  id: string;
+  status: string;
+  // add fields as needed
+};
+
 /**
  * Workflow Type Definitions
  */

@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "allowImportingTsExtensions": true,
     "target": "ES2017",
     "lib": [
       "dom",
@@ -17,6 +18,7 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "react-jsx",
+    "types": ["node", "jest", "react", "stripe"],
     "plugins": [
       {
         "name": "next"
@@ -25,8 +27,9 @@
     "strictNullChecks": true,
     "baseUrl": ".",
     "paths": {
-      "@/*": ["src/*"],
-      "@lib/*": ["lib/*"]
+      "@/*": ["./*"],
+      "@lib/*": ["lib/*"],
+      "@billing/*": ["billing/*"]
     }
   },
   "include": [

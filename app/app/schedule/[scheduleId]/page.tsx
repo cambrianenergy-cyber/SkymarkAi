@@ -49,7 +49,7 @@ interface ContentAsset {
 export default function ScheduleDetailPage() {
   const router = useRouter();
   const params = useParams();
-  const scheduleId = params.scheduleId as string;
+  const scheduleId = params?.scheduleId as string;
 
   const [user, setUser] = useState<any>(null);
   const [authChecked, setAuthChecked] = useState(false);

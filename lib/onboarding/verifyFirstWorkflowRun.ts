@@ -1,5 +1,5 @@
 import { collection, query, where, limit, getDocs } from "firebase/firestore";
-import { db } from "@/lib/firebase";
+import { db } from "@/lib/firebaseClient";
 
 export async function verifyFirstWorkflowRun(workspaceId: string): Promise<boolean> {
   const q = query(

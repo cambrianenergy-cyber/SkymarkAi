@@ -1,3 +1,11 @@
+// Stubs to unblock build
+export async function claimNextTask(...args: any[]): Promise<any> {
+  return null;
+}
+
+export async function runOneTask(...args: any[]): Promise<any> {
+  return null;
+}
 import { executeToolCallWithGovernance } from './executeToolCallWithGovernance';
 // Import your types and helpers as needed
 

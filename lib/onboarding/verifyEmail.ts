@@ -1,6 +1,7 @@
-import { auth } from "@/lib/firebaseAdmin";
+
+import { adminAuth } from "@/lib/firebaseAdmin";
 
 export async function verifyEmail(uid: string): Promise<boolean> {
-  const user = await auth.getUser(uid);
+  const user = await adminAuth.getUser(uid);
   return user.emailVerified === true;
 }

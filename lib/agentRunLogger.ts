@@ -2,7 +2,7 @@
 
 import { collection, addDoc, query, where, getDocs, updateDoc, doc, serverTimestamp, Timestamp } from 'firebase/firestore';
 import { db } from './firebase';
-import { AgentRun } from './types/agentAudit';
+import { AgentRun } from '@lib/types/agentAudit';
 import { writeToDeadLetterQueue } from './deadLetterQueue';
 
 export interface LogAgentRunParams {

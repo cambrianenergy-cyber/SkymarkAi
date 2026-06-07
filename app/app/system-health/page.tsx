@@ -4,7 +4,7 @@ import { useAuthWorkspaceGuard } from '@/lib/useAuthWorkspaceGuard';
 import { useEffect, useState } from 'react';
 import { ArrowLeft, CheckCircle2, AlertTriangle, Activity, TrendingUp, AlertCircle } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { SystemHealth } from '@/lib/types/agentAudit';
+import { SystemHealth } from '@lib/types/agentAudit';
 import { validateIntegrations, IntegrationStatus } from '@/lib/integrationValidator';
 
 export default function SystemHealthPage() {

@@ -1,4 +1,5 @@
 import { db } from "@/lib/orchestrator/firestore";
+import { collection, query, where, getDocs, doc, setDoc, limit } from "firebase/firestore";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { PLAN_CONFIG, Plan } from "@/lib/orchestrator/types";
 
@@ -8,14 +9,23 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   if (!workspaceId || !workflow) return res.status(400).json({ error: "workspaceId and workflow required" });
 
   // Fetch subscription/plan for workspace
-  const subSnap = await db().collection("subscriptions").where("workspaceId", "==", workspaceId).limit(1).get();
+  const subQ = query(
+    collection(db, "subscriptions"),
+    where("workspaceId", "==", workspaceId),
+    limit(1)
+  );
+  const subSnap = await getDocs(subQ);
   if (subSnap.empty) return res.status(403).json({ error: "No subscription found for workspace" });
   const sub = subSnap.docs[0].data();
   const plan: Plan = sub.plan;
   const workflowLimit = PLAN_CONFIG[plan]?.workflowLimit;
 
   // Count current workflows
-  const workflowSnap = await db().collection("workflows").where("workspaceId", "==", workspaceId).get();
+  const workflowQ = query(
+    collection(db, "workflows"),
+    where("workspaceId", "==", workspaceId)
+  );
+  const workflowSnap = await getDocs(workflowQ);
   const workflowCount = workflowSnap.size;
 
   if (workflowLimit !== null && workflowCount >= workflowLimit) {
@@ -23,7 +33,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   // Create workflow
-  const ref = db().collection("workflows").doc();
-  await ref.set({ ...workflow, workflowId: ref.id, workspaceId, createdAt: new Date(), updatedAt: new Date() });
+  const ref = doc(collection(db, "workflows"));
+  await setDoc(ref, { ...workflow, workflowId: ref.id, workspaceId, createdAt: new Date(), updatedAt: new Date() });
   return res.status(200).json({ ok: true, workflowId: ref.id });
 }

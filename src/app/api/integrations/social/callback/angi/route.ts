@@ -15,7 +15,7 @@ export async function GET(req: Request) {
 
   const [state, attemptId, workspaceId] = stateRaw.split(":");
   const attemptRef = adminDb.collection("integration_connect_attempts").doc(attemptId);
-  const attemptSnap = await attemptRef.get();
+  const attemptSnap = await attemptRef.get(); // attemptRef is a DocumentReference
 
   if (!attemptSnap.exists) return NextResponse.redirect(`${process.env.APP_URL}/onboarding?error=invalid_attempt`);
   const attempt = attemptSnap.data() as any;
@@ -40,7 +40,8 @@ export async function GET(req: Request) {
 
   const tokenJson = await tokenRes.json();
   if (!tokenRes.ok) {
-    await attemptRef.delete().catch(() => {});
+    // Delete the attempt document if token exchange fails
+    await adminDb.collection("integration_connect_attempts").doc(attemptId).delete().catch(() => {});
     return NextResponse.redirect(`${process.env.APP_URL}/onboarding?error=token_exchange_failed`);
   }
 
@@ -83,7 +84,8 @@ export async function GET(req: Request) {
     { merge: true }
   );
 
-  await attemptRef.delete().catch(() => {});
+  // Delete the attempt document after successful integration
+  await adminDb.collection("integration_connect_attempts").doc(attemptId).delete().catch(() => {});
 
   return NextResponse.redirect(`${process.env.APP_URL}/app/${workspaceId}/onboarding`);
 }

@@ -1,4 +1,4 @@
-import { getFirestore, serverTimestamp } from "@lib/firebase";
+import { getFirestore, serverTimestamp } from "firebase/firestore";
 import { CampaignRun } from "../lib/types/campaignRun";
 import { collection, addDoc } from "firebase/firestore";
 

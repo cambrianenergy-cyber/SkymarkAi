@@ -1,5 +1,12 @@
 import { NextResponse } from 'next/server';
 import { db } from '@/lib/firebase';
+import {
+  collection,
+  doc,
+  getDoc,
+  setDoc,
+  deleteDoc
+} from 'firebase/firestore';
 
 // New onboarding schema version
 const ONBOARDING_VERSION = 1;
@@ -39,26 +46,32 @@ export async function GET(request: Request) {
   }
   try {
     // New canonical path
-    const newDocRef = db()
-      .collection('workspaces')
-      .doc(workspaceId)
-      .collection('members')
-      .doc(userId)
-      .collection('onboarding')
-      .doc('state');
-    const newSnap = await newDocRef.get();
-    if (newSnap.exists) {
+    const newDocRef = doc(
+      collection(
+        doc(
+          collection(
+            doc(collection(db, 'workspaces'), workspaceId),
+            'members'
+          ),
+          userId
+        ),
+        'onboarding'
+      ),
+      'state'
+    );
+    const newSnap = await getDoc(newDocRef);
+    if (newSnap.exists()) {
       const data = newSnap.data();
       return NextResponse.json({ ...data, userId, workspaceId });
     }
     // Try old path for migration
-    const oldDocRef = db().collection('onboarding_states').doc(`${userId}_${workspaceId}`);
-    const oldSnap = await oldDocRef.get();
-    if (oldSnap.exists) {
+    const oldDocRef = doc(collection(db, 'onboarding_states'), `${userId}_${workspaceId}`);
+    const oldSnap = await getDoc(oldDocRef);
+    if (oldSnap.exists()) {
       const oldData = oldSnap.data();
       const migrated = migrateToNewSchema(oldData);
-      await newDocRef.set(migrated);
-      await oldDocRef.delete();
+      await setDoc(newDocRef, migrated);
+      await deleteDoc(oldDocRef);
       return NextResponse.json({ ...migrated, userId, workspaceId, migrated: true });
     }
     // Default state if not found
@@ -70,7 +83,7 @@ export async function GET(request: Request) {
       lastEvaluatedAt: now,
       steps: {},
     };
-    await newDocRef.set(defaultState);
+    await setDoc(newDocRef, defaultState);
     return NextResponse.json({ ...defaultState, userId, workspaceId, initialized: true });
   } catch (err) {
     return NextResponse.json({ error: 'Failed to fetch onboarding state' }, { status: 500 });
@@ -95,19 +108,25 @@ export async function POST(request: Request) {
       steps: onboarding.steps || {},
     };
     // Write to new canonical path
-    const newDocRef = db()
-      .collection('workspaces')
-      .doc(workspaceId)
-      .collection('members')
-      .doc(userId)
-      .collection('onboarding')
-      .doc('state');
-    await newDocRef.set(onboardingState);
+    const newDocRef = doc(
+      collection(
+        doc(
+          collection(
+            doc(collection(db, 'workspaces'), workspaceId),
+            'members'
+          ),
+          userId
+        ),
+        'onboarding'
+      ),
+      'state'
+    );
+    await setDoc(newDocRef, onboardingState);
     // Delete old path if exists
-    const oldDocRef = db().collection('onboarding_states').doc(`${userId}_${workspaceId}`);
-    const oldSnap = await oldDocRef.get();
-    if (oldSnap.exists) {
-      await oldDocRef.delete();
+    const oldDocRef = doc(collection(db, 'onboarding_states'), `${userId}_${workspaceId}`);
+    const oldSnap = await getDoc(oldDocRef);
+    if (oldSnap.exists()) {
+      await deleteDoc(oldDocRef);
     }
     return NextResponse.json({ success: true });
   } catch (err) {

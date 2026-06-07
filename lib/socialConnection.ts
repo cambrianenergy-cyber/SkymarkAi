@@ -1,6 +1,6 @@
 import { doc, setDoc, getDoc, updateDoc } from "firebase/firestore";
 import { db } from "./firebase";
-import type { SocialConnection } from "./types/socialConnection";
+import type SocialConnection from "./types/socialConnection";
 
 // Create or update a social connection
 type ConnectionInput = Omit<SocialConnection, "id" | "lastChecked"> & { lastChecked?: number };

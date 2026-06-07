@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { requireSession } from "@/lib/auth/requireSession";
-import { db } from "@/lib/firebaseAdmin";
+import { adminDb } from "@/lib/firebaseAdmin";
 import { recommendPlan } from "../../../../lib/onboarding/recommendPlan";
 import type { OnboardingStep } from "@/lib/onboardingTypes";
 
@@ -14,18 +14,18 @@ export async function POST(req: Request) {
 
   if (!body.workspaceId) return NextResponse.json({ error: "MISSING_WORKSPACE" }, { status: 400 });
 
-  const wsRef = db.collection("workspaces").doc(body.workspaceId);
+  const wsRef = adminDb.collection("workspaces").doc(body.workspaceId);
   const wsSnap = await wsRef.get();
   if (!wsSnap.exists) return NextResponse.json({ error: "WORKSPACE_NOT_FOUND" }, { status: 404 });
 
   const ws = wsSnap.data()!;
-  if (ws.ownerId !== uid) {
+  if (!(ws && typeof ws === 'object' && 'ownerId' in ws && ws.ownerId === uid)) {
     // tighten later to allow admin; for now owner-only write
     return NextResponse.json({ error: "FORBIDDEN" }, { status: 403 });
   }
 
   const now = Date.now();
-  const currentOnboarding = (ws.onboarding ?? {}) as Record<string, any>;
+  const currentOnboarding = (ws && typeof ws === 'object' && 'onboarding' in ws && ws.onboarding) ? ws.onboarding : {};
 
   // Merge patch
   function deepMerge(base: any, patch: any): any {
@@ -42,7 +42,7 @@ export async function POST(req: Request) {
   const recommended = recommendPlan(merged);
 
   // Step progression (never go backwards)
-  const nextStep = Math.max(Number(ws.onboardingStep ?? 1), Number(body.step ?? 1));
+  const nextStep = Math.max(Number((ws && typeof ws === 'object' && 'onboardingStep' in ws && ws.onboardingStep) ? ws.onboardingStep : 1), Number(body.step ?? 1));
 
   await wsRef.set(
     {

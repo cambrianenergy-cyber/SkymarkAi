@@ -1,4 +1,4 @@
-import { getFirestore, serverTimestamp } from "@lib/firebase";
+import { getFirestore, serverTimestamp } from "firebase/firestore";
 import { CampaignMessage } from "../lib/types/campaignMessage";
 import { collection, addDoc, doc, setDoc } from "firebase/firestore";
 

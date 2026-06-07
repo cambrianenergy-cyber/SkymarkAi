@@ -1,3 +1,3 @@
 // Minimal stub for goldenWorkflow
-export function createGoldenTestWorkflow() { return {}; }
-export function runGoldenTestWorkflow() { return {}; }
+// Proxy to real implementation in lib/goldenWorkflow.ts
+export { createGoldenTestWorkflow, runGoldenTestWorkflow } from '../../lib/goldenWorkflow';

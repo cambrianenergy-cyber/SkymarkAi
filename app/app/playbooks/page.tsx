@@ -1,8 +1,8 @@
 'use client';
 
 import { useAuthWorkspaceGuard } from '@/lib/useAuthWorkspaceGuard';
-import { db } from '@/lib/firebase';
-import { INDUSTRY_PLAYBOOKS } from '@/lib/playbooks';
+import { db } from '@/lib/firebaseClient';
+import { INDUSTRY_PLAYBOOKS } from '../../../lib/playbooks';
 import { addDoc, collection, getDocs, query, serverTimestamp, where } from 'firebase/firestore';
 import { ArrowLeft, CheckCircle, Sparkles } from 'lucide-react';
 import { useRouter } from 'next/navigation';

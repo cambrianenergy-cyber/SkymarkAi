@@ -67,7 +67,7 @@ const AGENT_TYPES = [
 export default function WorkflowDetailPage() {
   const router = useRouter();
   const params = useParams();
-  const workflowId = params.workflowId as string;
+  const workflowId = params?.workflowId as string;
 
   const [user, setUser] = useState<any>(null);
   const [authChecked, setAuthChecked] = useState(false);

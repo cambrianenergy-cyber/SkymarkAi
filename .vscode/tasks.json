@@ -108,6 +108,328 @@
 				"$eslint-stylish"
 			],
 			"group": "build"
+		},
+		{
+			"label": "TypeScript: Watch & Show Errors",
+			"type": "shell",
+			"command": "npx",
+			"args": [
+				"tsc",
+				"--watch",
+				"--noEmit"
+			],
+			"isBackground": true,
+			"group": "build"
+		},
+		{
+			"label": "Build Next.js app",
+			"type": "shell",
+			"command": "npm",
+			"args": [
+				"run",
+				"build"
+			],
+			"group": "build"
+		},
+		{
+			"label": "Clean Next.js .next cache",
+			"type": "shell",
+			"command": "npx",
+			"args": [
+				"next",
+				"build",
+				"--clean"
+			],
+			"isBackground": false,
+			"group": "build"
+		},
+		{
+			"label": "Build Next.js app",
+			"type": "shell",
+			"command": "npm",
+			"args": [
+				"run",
+				"build"
+			],
+			"isBackground": false,
+			"group": "build"
+		},
+		{
+			"label": "Build Next.js app",
+			"type": "shell",
+			"command": "npm",
+			"args": [
+				"run",
+				"build"
+			],
+			"isBackground": false,
+			"group": "build"
+		},
+		{
+			"label": "Build Next.js app",
+			"type": "shell",
+			"command": "npm",
+			"args": [
+				"run",
+				"build"
+			],
+			"isBackground": false,
+			"group": "build"
+		},
+		{
+			"label": "Build Next.js app",
+			"type": "shell",
+			"command": "npm",
+			"args": [
+				"run",
+				"build"
+			],
+			"isBackground": false,
+			"group": "build"
+		},
+		{
+			"label": "Build Next.js app",
+			"type": "shell",
+			"command": "npm",
+			"args": [
+				"run",
+				"build"
+			],
+			"isBackground": false,
+			"group": "build"
+		},
+		{
+			"label": "Build Next.js app",
+			"type": "shell",
+			"command": "npm",
+			"args": [
+				"run",
+				"build"
+			],
+			"isBackground": false,
+			"group": "build"
+		},
+		{
+			"label": "Deploy Next.js app (Vercel)",
+			"type": "shell",
+			"command": "npx",
+			"args": [
+				"vercel",
+				"deploy",
+				"--prod"
+			],
+			"isBackground": false,
+			"group": "build"
+		},
+		{
+			"label": "Build Next.js app",
+			"type": "shell",
+			"command": "npm",
+			"args": [
+				"run",
+				"build"
+			],
+			"isBackground": false,
+			"group": "build"
+		},
+		{
+			"label": "Build Next.js app",
+			"type": "shell",
+			"command": "npm",
+			"args": [
+				"run",
+				"build"
+			],
+			"isBackground": false,
+			"group": "build"
+		},
+		{
+			"label": "Deploy Next.js app (Vercel)",
+			"type": "shell",
+			"command": "npx",
+			"args": [
+				"vercel",
+				"deploy",
+				"--prod"
+			],
+			"isBackground": false,
+			"group": "build"
+		},
+		{
+			"label": "Deploy Next.js app (Vercel)",
+			"type": "shell",
+			"command": "npx",
+			"args": [
+				"vercel",
+				"deploy",
+				"--prod"
+			],
+			"isBackground": false,
+			"group": "build"
+		},
+		{
+			"label": "Build Next.js app (clean)",
+			"type": "shell",
+			"command": "npm",
+			"args": [
+				"run",
+				"build"
+			],
+			"isBackground": false,
+			"group": "build"
+		},
+		{
+			"label": "Deploy Next.js app (Vercel, clean)",
+			"type": "shell",
+			"command": "npx",
+			"args": [
+				"vercel",
+				"deploy",
+				"--prod"
+			],
+			"isBackground": false,
+			"group": "build"
+		},
+		{
+			"label": "Deploy Next.js app (Vercel, final)",
+			"type": "shell",
+			"command": "npx",
+			"args": [
+				"vercel",
+				"deploy",
+				"--prod"
+			],
+			"isBackground": false,
+			"group": "build"
+		},
+		{
+			"label": "Deploy Next.js app (Vercel, clean install)",
+			"type": "shell",
+			"command": "npx",
+			"args": [
+				"vercel",
+				"deploy",
+				"--prod"
+			],
+			"isBackground": false,
+			"group": "build"
+		},
+		{
+			"label": "Deploy Next.js app (Vercel, after install)",
+			"type": "shell",
+			"command": "npx",
+			"args": [
+				"vercel",
+				"deploy",
+				"--prod"
+			],
+			"isBackground": false,
+			"group": "build"
+		},
+		{
+			"label": "Deploy Next.js app (Vercel, after env cleanup)",
+			"type": "shell",
+			"command": "npx",
+			"args": [
+				"vercel",
+				"deploy",
+				"--prod"
+			],
+			"isBackground": false,
+			"group": "build"
+		},
+		{
+			"label": "Build Next.js app (local test)",
+			"type": "shell",
+			"command": "npm",
+			"args": [
+				"run",
+				"build"
+			],
+			"isBackground": false,
+			"group": "build"
+		},
+		{
+			"label": "Build Next.js app (local test, after full clean)",
+			"type": "shell",
+			"command": "npm",
+			"args": [
+				"run",
+				"build"
+			],
+			"isBackground": false,
+			"group": "build"
+		},
+		{
+			"label": "Deploy Next.js app (Vercel)",
+			"type": "shell",
+			"command": "npx",
+			"args": [
+				"vercel",
+				"deploy",
+				"--prod"
+			],
+			"isBackground": false,
+			"group": "build"
+		},
+		{
+			"label": "Clean Next.js .next cache",
+			"type": "shell",
+			"command": "npx",
+			"args": [
+				"next",
+				"build",
+				"--clean"
+			],
+			"isBackground": false,
+			"group": "build"
+		},
+		{
+			"label": "Build Next.js app (clean)",
+			"type": "shell",
+			"command": "npm",
+			"args": [
+				"run",
+				"build"
+			],
+			"isBackground": false,
+			"group": "build"
+		},
+		{
+			"label": "Deploy Next.js app (Vercel, after env cleanup)",
+			"type": "shell",
+			"command": "npx",
+			"args": [
+				"vercel",
+				"deploy",
+				"--prod"
+			],
+			"isBackground": false,
+			"group": "build"
+		},
+		{
+			"label": "Deploy Next.js app (Vercel, after root cleanup)",
+			"type": "shell",
+			"command": "npx",
+			"args": [
+				"vercel",
+				"deploy",
+				"--prod"
+			],
+			"isBackground": false,
+			"group": "build"
+		},
+		{
+			"label": "Deploy Next.js app (Vercel, after duplicate cleanup)",
+			"type": "shell",
+			"command": "npx",
+			"args": [
+				"vercel",
+				"deploy",
+				"--prod"
+			],
+			"isBackground": false,
+			"group": "build"
 		}
 	]
 }

@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { initializeApp, getApps, cert } from "firebase-admin/app";
 import path from "path";
-import { executeWorkflowRun } from "@/src/workers/orchestrator";
-import { makeFirestoreDB } from "@/src/workers/firestoreDbAdapter";
-import { agentRunner } from "@/src/workers/agentRunner";
+import { executeWorkflowRun } from "@/workers/orchestrator.worker";
+import { makeFirestoreDB } from "@/workers/firestoreDbAdapter";
+import { agentRunner } from "@/workers/agentRunner";
 
 // Initialize Firebase Admin
 if (!getApps().length) {
@@ -36,26 +36,13 @@ export async function POST(request: NextRequest) {
     const db = makeFirestoreDB();
 
     // Execute the workflow run
-    const result = await executeWorkflowRun({
-      db,
-      agentRunner,
-      workspaceId,
-      runId,
-      options: {
-        environment: environment as any,
-        source: "server",
-        defaultTimeoutMs: 60_000,
-        defaultRetryMax: 2,
-        hardMaxWallMs: 10 * 60_000, // 10 minutes
-      },
-    });
+    const result = await executeWorkflowRun(runId);
 
+    const status = result.ok ? "succeeded" : "failed";
     return NextResponse.json({
       success: result.ok,
-      status: result.status,
-      message: result.ok
-        ? `Workflow run ${result.status}`
-        : `Workflow run ${result.status}`,
+      status,
+      message: `Workflow run ${status}`,
     });
   } catch (error: any) {
     console.error("API error:", error);

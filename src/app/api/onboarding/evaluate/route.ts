@@ -2,6 +2,11 @@ import { NextResponse } from 'next/server';
 import fs from 'fs/promises';
 import path from 'path';
 import { db } from '@/lib/firebase';
+import {
+  collection,
+  doc,
+  setDoc
+} from 'firebase/firestore';
 
 // POST /api/onboarding/evaluate
 export async function POST(request: Request) {
@@ -38,15 +43,21 @@ export async function POST(request: Request) {
       steps: evaluatedSteps
     };
 
-    // Write to Firestore
-    const newDocRef = db()
-      .collection('workspaces')
-      .doc(workspaceId)
-      .collection('members')
-      .doc(userId)
-      .collection('onboarding')
-      .doc('state');
-    await newDocRef.set(newState);
+    // Write to Firestore (modular API)
+    const onboardingStateRef = doc(
+      collection(
+        doc(
+          collection(
+            doc(collection(db, 'workspaces'), workspaceId),
+            'members'
+          ),
+          userId
+        ),
+        'onboarding'
+      ),
+      'state'
+    );
+    await setDoc(onboardingStateRef, newState);
 
     return NextResponse.json({ success: true, state: newState });
   } catch (err) {

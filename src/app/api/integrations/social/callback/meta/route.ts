@@ -81,12 +81,15 @@ export async function GET(req: Request) {
   if (onboardingSnap.exists) {
     const onboarding = onboardingSnap.data();
     // Merge with any existing connected platforms
-    const prev = onboarding?.integrations?.social || {};
-    connectedPlatforms = Array.isArray(prev.connectedPlatforms)
-      ? Array.from(new Set([...prev.connectedPlatforms, "meta"]))
-      : ["meta"];
-    statusByPlatform = { ...(prev.statusByPlatform || {}), meta: { status: "connected" } };
-    deferred = !!prev.deferred && connectedPlatforms.length === 0;
+    let prev = {};
+    if (onboarding && typeof onboarding === 'object' && 'integrations' in onboarding && onboarding.integrations && typeof onboarding.integrations === 'object' && 'social' in onboarding.integrations) {
+      prev = onboarding.integrations.social || {};
+    }
+    const prevConnectedPlatforms = (prev && typeof prev === 'object' && 'connectedPlatforms' in prev && Array.isArray(prev.connectedPlatforms)) ? prev.connectedPlatforms : [];
+    connectedPlatforms = Array.from(new Set([...prevConnectedPlatforms, "meta"]));
+    const prevStatusByPlatform = (prev && typeof prev === 'object' && 'statusByPlatform' in prev && prev.statusByPlatform && typeof prev.statusByPlatform === 'object') ? prev.statusByPlatform : {};
+    statusByPlatform = { ...prevStatusByPlatform, meta: { status: "connected" } };
+    deferred = (prev && typeof prev === 'object' && 'deferred' in prev && !!prev.deferred && connectedPlatforms.length === 0);
   }
   const connectedCount = connectedPlatforms.length;
   await onboardingRef.set(

@@ -33,7 +33,7 @@ interface FollowUpSequence {
 export default function SequenceDetailPage() {
   const router = useRouter();
   const params = useParams();
-  const sequenceId = params.sequenceId as string;
+  const sequenceId = params?.sequenceId as string;
 
   const [user, setUser] = useState<any>(null);
   const [authChecked, setAuthChecked] = useState(false);

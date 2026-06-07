@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { founderEmergencyOverride } from '../../../src/lib/orchestrator/founderOverride';
+import { founderEmergencyOverride } from '../../src/lib/orchestrator/founderOverride';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== 'POST') {

@@ -1,6 +1,7 @@
 // Prometheus metrics endpoint for orchestrator
 // Exposes basic metrics for scraping
 import { db } from "@/lib/orchestrator/firestore";
+import { collection, query, where, getDocs } from "firebase/firestore";
 import type { NextApiRequest, NextApiResponse } from "next";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -11,33 +12,36 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   const statuses = ["queued", "running", "done", "failed"];
   let metrics = "";
   for (const status of statuses) {
-    const snap = await db()
-      .collection("agent_tasks")
-      .where("workspaceId", "==", workspaceId)
-      .where("status", "==", status)
-      .get();
+    const q = query(
+      collection(db, "agent_tasks"),
+      where("workspaceId", "==", workspaceId),
+      where("status", "==", status)
+    );
+    const snap = await getDocs(q);
     metrics += `orchestrator_agent_tasks{status="${status}",workspace="${workspaceId}"} ${snap.size}\n`;
   }
 
   // Count agent_runs by status
   const runStatuses = ["queued", "running", "succeeded", "failed", "canceled"];
   for (const status of runStatuses) {
-    const snap = await db()
-      .collection("agent_runs")
-      .where("workspaceId", "==", workspaceId)
-      .where("status", "==", status)
-      .get();
+    const q = query(
+      collection(db, "agent_runs"),
+      where("workspaceId", "==", workspaceId),
+      where("status", "==", status)
+    );
+    const snap = await getDocs(q);
     metrics += `orchestrator_agent_runs{status="${status}",workspace="${workspaceId}"} ${snap.size}\n`;
   }
 
   // Count workflow_runs by status
   const wfStatuses = ["queued", "running", "succeeded", "failed", "partial", "canceled"];
   for (const status of wfStatuses) {
-    const snap = await db()
-      .collection("workflow_runs")
-      .where("workspaceId", "==", workspaceId)
-      .where("status", "==", status)
-      .get();
+    const q = query(
+      collection(db, "workflow_runs"),
+      where("workspaceId", "==", workspaceId),
+      where("status", "==", status)
+    );
+    const snap = await getDocs(q);
     metrics += `orchestrator_workflow_runs{status="${status}",workspace="${workspaceId}"} ${snap.size}\n`;
   }
 

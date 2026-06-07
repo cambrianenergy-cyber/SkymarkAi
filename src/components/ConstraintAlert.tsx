@@ -1,2 +1,2 @@
 // Minimal stub for ConstraintAlert
-export default function ConstraintAlert() { return null; }
+export default function ConstraintAlert({ workspaceId }: { workspaceId: string }) { return null; }

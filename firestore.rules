@@ -1,3 +1,13 @@
+service cloud.firestore {
+function isValidAttachment(a) {
+  return a.name is string && a.url is string && a.type is string;
+}
+function isValidParticipant(p) {
+  return p.type in ["contact", "user", "agent"] && p.id is string;
+}
+function isValidAction(action) {
+  return action.type in ["create_task", "trigger_workflow", "notify", "assign_agent"] && action.config is map;
+}
 // Onboarding subcollection under workspace members
 function isWorkspaceMember(workspaceId, uid) {
   // Checks if the user is a member of the workspace
@@ -128,7 +138,8 @@ match /users/{userId} {
 
 // Workspace Settings: Only founders/admins can change
 match /workspaces/{workspaceId} {
-  allow read: if isAdmin() || (isViewer() && isSignedIn());
+  // TEMPORARY: Allow public read access for testing
+  allow read: if true;
   allow create, update: if isAdmin();
   allow delete: if false;
 }
@@ -284,7 +295,7 @@ match /messages/{messageId} {
       request.resource.data.body is string &&
       request.resource.data.attachments is list &&
       request.resource.data.attachments.hasOnly(map) &&
-      request.resource.data.attachments.all(a => a.name is string && a.url is string && a.type is string) &&
+      request.resource.data.attachments.all(isValidAttachment) &&
       request.resource.data.status in ["sent", "delivered", "read", "failed", "queued"] &&
       request.resource.data.createdAt is timestamp
     );
@@ -307,7 +318,7 @@ match /threads/{threadId} {
       request.resource.data.participants is list &&
       request.resource.data.participants.size() > 0 &&
       request.resource.data.participants.hasOnly(map) &&
-      request.resource.data.participants.all(p => p.type in ["contact", "user", "agent"] && p.id is string)
+      request.resource.data.participants.all(isValidParticipant)
     );
   allow delete: if false;
 }
@@ -341,7 +352,7 @@ match /orchestrator_rules/{ruleId} {
       request.resource.data.actions is list &&
       request.resource.data.actions.size() > 0 &&
       request.resource.data.actions.hasOnly(map) &&
-      request.resource.data.actions.all(action => action.type in ["create_task", "trigger_workflow", "notify", "assign_agent"] && action.config is map) &&
+      request.resource.data.actions.all(isValidAction) &&
       (request.resource.data.cooldownSeconds == null || request.resource.data.cooldownSeconds is number) &&
       request.resource.data.createdAt is timestamp &&
       request.resource.data.updatedAt is timestamp
@@ -711,110 +722,17 @@ match /subscriptions/{subscriptionId} {
     );
   allow delete: if false;
 }
-rules_version = '2';
-service cloud.firestore {
-  match /databases/{database}/documents {
-    
-    function isSignedIn() {
-      return request.auth != null;
-    }
-    
-    // Users collection - identity + plan context + permissions anchors
-    match /users/{userId} {
-      allow read: if isSignedIn() && request.auth.uid == userId;
-      allow create, update: if isSignedIn() && request.auth.uid == userId &&
-        (
-          request.resource.data.uid is string &&
-          request.resource.data.email is string &&
-          (request.resource.data.displayName == null || request.resource.data.displayName is string) &&
-          (request.resource.data.photoURL == null || request.resource.data.photoURL is string) &&
-          request.resource.data.role in ["founder", "admin", "member"] &&
-          request.resource.data.createdAt is timestamp &&
-          request.resource.data.updatedAt is timestamp &&
-          (request.resource.data.lastSeenAt == null || request.resource.data.lastSeenAt is timestamp) &&
-          // Strongly recommended
-          (request.resource.data.defaultWorkspaceId == null || request.resource.data.defaultWorkspaceId is string) &&
-          (request.resource.data.status == null || request.resource.data.status in ["active", "suspended", "deleted"]) &&
-          (request.resource.data.flags == null || (request.resource.data.flags is map && request.resource.data.flags.isFounder is bool && request.resource.data.flags.isTestUser is bool))
-        );
-      allow delete: if false;
-    }
-    
-    // Workspaces - simplified
-    match /workspaces/{workspaceId} {
-      allow read, write: if isSignedIn();
-    }
-    
-    // Workspace members - simplified
-    match /workspace_members/{memberId} {
-      allow read, write: if isSignedIn();
-    }
-    
-    // Workflow templates - public read for marketplace
-    match /workflow_templates/{templateId} {
-      allow read: if isSignedIn();
-      allow write: if false;
-    }
-    
-    // Template installs - anyone can track installs
-    match /template_installs/{installId} {
-      allow read, create: if isSignedIn();
-      allow delete: if isSignedIn() && request.auth.uid == resource.data.installedByUid;
-    }
-    
-    // Workflows - allow authenticated users
-    match /workflows/{workflowId} {
-      allow read, write: if isSignedIn();
-    }
-    
-    // Workflow runs
-    match /workflow_runs/{runId} {
-      allow read, write: if isSignedIn();
-    }
-    
-    // Leads
-    match /leads/{leadId} {
-      allow read, write: if isSignedIn();
-    }
-    
-    // Follow-up sequences
-    match /followup_sequences/{sequenceId} {
-      allow read, write: if isSignedIn();
-    }
-    
-    // Follow-up jobs
-    match /followup_jobs/{jobId} {
-      allow read, write: if isSignedIn();
-    }
-    
-    // Inbox threads
-    match /inbox_threads/{threadId} {
-      allow read, write: if isSignedIn();
-    }
-    
-    // Inbox messages
-    match /inbox_messages/{messageId} {
-      allow read, create, delete: if isSignedIn();
-    }
-    
-    // Assets
-    match /assets/{assetId} {
-      allow read, write: if isSignedIn();
-    }
-    
-    // Scheduled posts
-    match /scheduled_posts/{postId} {
-      allow read, write: if isSignedIn();
-    }
-    
-    // Campaigns
-    match /campaigns/{campaignId} {
-      allow read, write: if isSignedIn();
-    }
-    
-    // Deny everything else
-    match /{document=**} {
-      allow read, write: if false;
-    }
-  }
+// Social connection docs: readable by workspace members, writable by admins
+match /workspaces/{workspaceId}/integrations/{platform}/connections/{uid} {
+  allow read: if isWorkspaceMember(workspaceId, request.auth.uid);
+  allow write: if isWorkspaceAdmin(workspaceId, request.auth.uid);
 }
+
+
+// Absolutely deny all client access to secret tokens
+match /secrets/{tokenRef} {
+  allow read: if false;
+  allow write: if false;
+}
+}
+

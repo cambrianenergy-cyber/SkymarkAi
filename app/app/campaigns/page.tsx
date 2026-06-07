@@ -60,19 +60,20 @@ export default function CampaignsPage() {
         where("workspaceId", "==", wsId)
       );
       const campaignRunSnap = await getDocs(campaignRunQ);
-      const campaignRuns = campaignRunSnap.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
+        const campaignRuns = campaignRunSnap.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+          status: doc.data().status,
+        }));
 
-      // Map campaignRuns to campaigns by workflowRunId
+      // Map campaignRuns to campaigns by id (matching workflowRunId to id)
       const campaignsWithRuns = data.map((c) => {
         const run = c.workflowRunId
-          ? campaignRuns.find((r) => r.workflowRunId === c.workflowRunId)
+          ? campaignRuns.find((r) => r.id === c.workflowRunId)
           : undefined;
         return {
           ...c,
-          campaignRunStatus: run?.status || undefined,
+          campaignRunStatus: run && typeof run.status !== "undefined" ? run.status : undefined,
         };
       });
       setCampaigns(campaignsWithRuns);
@@ -275,16 +276,26 @@ export default function CampaignsPage() {
                           Campaign: {campaign.campaignRunStatus}
                         </span>
                       )}
-                      {(campaign.campaignRunStatus === "running" || campaign.campaignRunStatus === "scheduled") && (
-                        <div className="flex flex-wrap gap-3 mt-1 text-xs">
-                          <span><strong>Queued:</strong> {campaign.audience?.queued ?? 0}</span>
-                          <span><strong>Sent:</strong> {campaign.audience?.sent ?? 0}</span>
-                          <span><strong>Delivered:</strong> {campaign.audience?.delivered ?? 0}</span>
-                          <span><strong>Opened:</strong> {campaign.audience?.opened ?? 0}</span>
-                          <span><strong>Clicked:</strong> {campaign.audience?.clicked ?? 0}</span>
-                          <span><strong>Replies:</strong> {campaign.audience?.replied ?? 0}</span>
-                          <span><strong>Failures:</strong> {campaign.audience?.failed ?? 0}</span>
-                        </div>
+                      {(campaign.campaignRunStatus === "running" || campaign.campaignRunStatus === "scheduled") && campaign.workflowRunId && (
+                        (() => {
+                          // Find the campaign_run for this workflowRunId
+                          const run = campaigns
+                            .map((c) => c.workflowRunId ? campaigns.find((r) => r.workflowRunId === c.workflowRunId) : undefined)
+                            .find((r) => r && r.workflowRunId === campaign.workflowRunId);
+                          type AudienceStats = { queued?: number; sent?: number; delivered?: number; opened?: number; clicked?: number; replied?: number; failed?: number };
+                          const audience: Partial<AudienceStats> = (run && typeof run.audience === 'object') ? run.audience as Partial<AudienceStats> : {};
+                          return (
+                            <div className="flex flex-wrap gap-3 mt-1 text-xs">
+                              <span><strong>Queued:</strong> {audience.queued ?? 0}</span>
+                              <span><strong>Sent:</strong> {audience.sent ?? 0}</span>
+                              <span><strong>Delivered:</strong> {audience.delivered ?? 0}</span>
+                              <span><strong>Opened:</strong> {audience.opened ?? 0}</span>
+                              <span><strong>Clicked:</strong> {audience.clicked ?? 0}</span>
+                              <span><strong>Replies:</strong> {audience.replied ?? 0}</span>
+                              <span><strong>Failures:</strong> {audience.failed ?? 0}</span>
+                            </div>
+                          );
+                        })()
                       )}
                     </div>
 

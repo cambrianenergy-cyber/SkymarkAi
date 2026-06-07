@@ -26,6 +26,11 @@ yarn-error.log*
 # local env files
 .env*.local
 
+# Ignore all env files and service account keys
+.env
+.env*
+serviceAccountKey.json
+
 # vercel
 .vercel
 
@@ -35,3 +40,8 @@ next-env.d.ts
 
 # secrets
 Web/Secrets/serviceAccountKey.json
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-fbsvc%40skymark-ai.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}

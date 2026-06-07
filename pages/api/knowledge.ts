@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { db } from '../../../src/lib/orchestrator/firestore';
+import { db } from '../../src/lib/orchestrator/firestore';
 import { writeToDeadLetterQueue } from '../../lib/deadLetterQueue';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {

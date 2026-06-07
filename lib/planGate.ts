@@ -1,4 +1,4 @@
-import type { PlanGate } from "@/src/workers/orchestrator";
+import type { PlanGate } from "../src/workers/orchestrator.d";
 
 // Stripe product/price mapping
 // IMPORTANT: Add metadata to each Price in Stripe Dashboard:
@@ -23,8 +23,8 @@ export const STRIPE = {
     },
     sovereign: { 
       productId: "prod_SOVEREIGN", 
-      priceId: "price_sovereign_monthly_1999",
-      priceMonthly: 1999,
+      priceId: "price_sovereign_monthly_1499",
+      priceMonthly: 1499,
       metadata: { type: "base_plan", key: "sovereign" }
     },
     founder: { 

@@ -1,5 +1,5 @@
 import { doc, getDoc } from "firebase/firestore";
-import { db } from "@/lib/firebase";
+import { db } from "@/lib/firebaseClient";
 
 export async function verifySocial(workspaceId: string, platform: string): Promise<boolean> {
   const ref = doc(

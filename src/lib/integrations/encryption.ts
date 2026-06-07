@@ -1,6 +1,6 @@
 import crypto from "crypto";
 
-const SECRET = process.env.INTEGRATION_TOKEN_SECRET;
+const SECRET = process.env.INTEGRATION_TOKEN_SECRET || "";
 
 export function encryptToken(token: string): string {
   const iv = crypto.randomBytes(16);

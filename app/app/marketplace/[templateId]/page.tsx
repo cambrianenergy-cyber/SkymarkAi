@@ -41,7 +41,7 @@ interface Template {
 export default function TemplateDetailPage() {
   const router = useRouter();
   const params = useParams();
-  const templateId = params.templateId as string;
+  const templateId = params?.templateId as string;
   
   const [user, setUser] = useState<any>(null);
   const [template, setTemplate] = useState<Template | null>(null);

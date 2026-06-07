@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
 import { requireSession } from "@/lib/auth/requireSession";
 
-const META_CLIENT_ID = process.env.META_CLIENT_ID;
-const META_REDIRECT_URI = process.env.META_REDIRECT_URI;
+const META_CLIENT_ID = process.env.META_CLIENT_ID || "";
+const META_REDIRECT_URI = process.env.META_REDIRECT_URI || "";
 const META_SCOPES = "email,public_profile";
 
 export async function POST(req: Request) {

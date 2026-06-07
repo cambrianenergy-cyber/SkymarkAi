@@ -1,7 +1,7 @@
 'use client';
 
 import { useAuthWorkspaceGuard } from '@/lib/useAuthWorkspaceGuard';
-import { db } from '@/lib/firebase';
+import { db } from '@/lib/firebaseClient';
 import { generateWeeklyReport, saveShareableReport } from '@/lib/shareableWins';
 import { collection, getDocs, orderBy, query, where } from 'firebase/firestore';
 import { ArrowLeft, ArrowUpRight, Calendar, Copy, ExternalLink, Share2, Sparkles, TrendingUp } from 'lucide-react';

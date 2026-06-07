@@ -11,18 +11,18 @@ export default function BookPage() {
     phone: "",
     preferredDate: "",
     preferredTime: "",
-    campaign: search.get("campaign") || "",
+    campaign: search?.get("campaign") || "",
     notes: "",
   });
   const [submitting, setSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const utmSource = search.get("utm_source") || "";
-  const utmCampaign = search.get("utm_campaign") || "";
-  const adId = search.get("ad_id") || "";
-  const adPlatform = search.get("ad_platform") || "";
-  const workspaceId = search.get("workspaceId") || "";
+  const utmSource = search?.get("utm_source") || "";
+  const utmCampaign = search?.get("utm_campaign") || "";
+  const adId = search?.get("ad_id") || "";
+  const adPlatform = search?.get("ad_platform") || "";
+  const workspaceId = search?.get("workspaceId") || "";
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();

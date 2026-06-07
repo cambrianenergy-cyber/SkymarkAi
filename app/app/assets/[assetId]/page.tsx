@@ -40,7 +40,7 @@ interface ContentAsset {
 export default function AssetDetailPage() {
   const router = useRouter();
   const params = useParams();
-  const assetId = params.assetId as string;
+  const assetId = params?.assetId as string;
 
   const [user, setUser] = useState<any>(null);
   const [authChecked, setAuthChecked] = useState(false);

@@ -1,3 +1,4 @@
+"use client";
 import React, { createContext, useContext, useEffect, useState, ReactNode } from 'react';
 
 interface UserRoleContextType {
@@ -16,7 +17,7 @@ export function UserRoleProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     async function fetchRoles() {
       const userId = typeof window !== 'undefined' ? window.localStorage.getItem('userId') : '';
-      const workspaceId = typeof window !== 'undefined' ? window.localStorage.getItem('workspaceId') : '';
+      const workspaceId = 'V7kzoES7soCvRCWa74Kg';
       if (!userId) return setLoading(false);
       const res = await fetch(`/api/user/role?userId=${userId}&workspaceId=${workspaceId}`);
       if (res.ok) {

@@ -20,8 +20,4 @@ export const serverTimestamp = jest.fn(() => new Date());
 export const auth = {};
 export const storage = {};
 
-export const doc = jest.fn(() => ({}));
-export const getDoc = jest.fn(() => Promise.resolve({ exists: true, data: () => ({}) }));
-export const updateDoc = jest.fn(() => Promise.resolve());
-export const arrayUnion = jest.fn((...args) => args);
-export const serverTimestamp = jest.fn(() => new Date());
+// (Removed duplicate exports for doc, getDoc, updateDoc, arrayUnion, serverTimestamp)

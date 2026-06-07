@@ -1,7 +1,7 @@
 // lib/orchestratorProdigy.ts
 
 import { db } from "./firebase";
-import { agentRunner } from "./agentRunner";
+import { DefaultAgentRunner } from "./agentRunner";
 import {
   doc,
   getDoc,
@@ -545,10 +545,10 @@ export class OrchestratorProdigy {
       try {
         console.log(`[ORCHESTRATOR] Running ${step.agentName}...`);
         const start = Date.now();
-        const agentResult = await agentRunner({
+        const agentResult = await DefaultAgentRunner({
           workspaceId: this.workspaceId,
           runId: decision.taskId,
-          userRole: "system",
+          userRole: "admin",
           input: step.inputs,
           step: {
             stepId: step.stepId,

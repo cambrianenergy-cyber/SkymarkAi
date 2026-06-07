@@ -1,2 +1,2 @@
 // Minimal stub for agentRunnerRegistry
-export function getAgentSpecialization() { return {}; }
+export function getAgentSpecialization(agentType: string): string | null { return null; }

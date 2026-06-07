@@ -15,7 +15,7 @@ import {
   serverTimestamp,
   orderBy,
 } from "firebase/firestore";
-import { auth, db } from "@/lib/firebase";
+import { auth, db } from "@/lib/firebaseClient";
 import InsightDropCard from "@/components/InsightDropCard";
 import ConstraintAlert from "@/components/ConstraintAlert";
 
@@ -39,7 +39,7 @@ interface Workflow {
 
 export default function WorkflowsPage() {
   const router = useRouter();
-  const { user, workspaceId, isReady, isAuthorized } = useAuthWorkspaceGuard();
+  const { user, workspaceId, isReady, isAuthorized } = useAuthWorkspaceGuard() as any;
   const [loading, setLoading] = useState(true);
   const [workflows, setWorkflows] = useState<Workflow[]>([]);
   const [showCreateForm, setShowCreateForm] = useState(false);

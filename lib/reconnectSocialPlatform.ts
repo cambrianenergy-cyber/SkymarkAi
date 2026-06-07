@@ -7,9 +7,11 @@ export async function reconnectSocialPlatform(userId: string, platform: string) 
     userId,
     workspaceId: "demo", // Replace with real workspace
     platform,
-    accessToken: "new_token",
+    tokenRef: "new_token",
     scopes: ["post", "read"],
     status: "connected",
     lastChecked: Date.now(),
+    createdAt: Date.now(),
+    updatedAt: Date.now(),
   });
 }

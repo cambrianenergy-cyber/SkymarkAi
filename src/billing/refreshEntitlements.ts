@@ -4,8 +4,8 @@
  * Called by Stripe webhooks, admin overrides, or scheduled jobs.
  */
 
-import { getFirestore, FieldValue } from "@/lib/firebaseAdmin";
-import { computeAllowedAgentTypes } from "@/src/billing/entitlements";
+import { adminDb, adminFieldValue } from "@/lib/firebaseAdmin";
+import { computeAllowedAgentTypes } from "@/billing/entitlements";
 
 // Import the shared type to avoid duplication and type mismatches
 type SubscriptionDoc = Parameters<typeof computeAllowedAgentTypes>[0];
@@ -26,7 +26,7 @@ export async function refreshEntitlements(
   workspaceId: string,
   subscriptionDoc?: SubscriptionDoc
 ): Promise<string[]> {
-  const db = getFirestore();
+  const db = adminDb;
   const subsRef = db.collection("subscriptions").doc(workspaceId);
 
   let sub: SubscriptionDoc;
@@ -48,8 +48,8 @@ export async function refreshEntitlements(
   // Update Firestore atomically
   await subsRef.update({
     "entitlements.allowedAgentTypes": allowedAgentTypes,
-    "entitlements.computedAt": FieldValue.serverTimestamp(),
-    "updatedAt": FieldValue.serverTimestamp(),
+    "entitlements.computedAt": adminFieldValue.serverTimestamp(),
+    "updatedAt": adminFieldValue.serverTimestamp(),
   });
 
   return allowedAgentTypes;
@@ -65,7 +65,6 @@ export async function refreshEntitlements(
 export async function batchRefreshEntitlements(
   workspaceIds: string[]
 ): Promise<Map<string, string[]>> {
-  const db = getFirestore();
   const results = new Map<string, string[]>();
 
   for (const workspaceId of workspaceIds) {

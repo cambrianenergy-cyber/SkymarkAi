@@ -27,14 +27,14 @@ export async function markWorkflowRunStatus(args: {
 
   if (prevStatus && prevStatus !== status) {
     const allowed = allowedTransitions[prevStatus] || [];
-    if (!allowed.includes(status)) {
+    if (!allowed.includes(status || "")) {
       throw new Error(`Invalid workflow run status transition: ${prevStatus} → ${status}`);
     }
   }
 
   const patch: Record<string, any> = { status, updatedAt: now() };
   if (status === "running" && !before.startedAt) patch.startedAt = now();
-  if (["succeeded", "failed", "canceled", "partial"].includes(status)) patch.endedAt = now();
+  if (["succeeded", "failed", "canceled", "partial"].includes(status || "")) patch.endedAt = now();
 
   await ref.set(patch, { merge: true });
 

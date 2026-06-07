@@ -1,7 +1,7 @@
 'use client';
 
 import { useAuthWorkspaceGuard } from '@/lib/useAuthWorkspaceGuard';
-import { db } from '@/lib/firebase';
+import { db } from '@/lib/firebaseClient';
 import { collection, query, where, getDocs, orderBy, limit } from 'firebase/firestore';
 import { ArrowLeft, CheckCircle, AlertCircle, Clock, Zap } from 'lucide-react';
 import { useRouter } from 'next/navigation';

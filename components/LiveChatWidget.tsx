@@ -1,7 +1,7 @@
 'use client';
 
 import { COMPANY_KNOWLEDGE, searchKnowledge } from '@/lib/companyKnowledge';
-import { db } from '@/lib/firebase';
+import { db } from '@/lib/firebaseClient';
 import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
 import { MessageCircle, Send, X, Minimize2 } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';

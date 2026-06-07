@@ -58,7 +58,7 @@ interface InboxMessage {
 export default function LeadDetailPage() {
   const router = useRouter();
   const params = useParams();
-  const leadId = params.leadId as string;
+  const leadId = params?.leadId as string;
 
   const [user, setUser] = useState<any>(null);
   const [authChecked, setAuthChecked] = useState(false);

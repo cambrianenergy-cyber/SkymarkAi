@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { db } from "@lib/firebase";
+import { db } from "@/lib/firebaseClient";
 import { collection, query, where, onSnapshot, DocumentData } from "firebase/firestore";
 
 export function useApprovalTasks(filter: { status?: string } = {}) {
@@ -9,9 +9,9 @@ export function useApprovalTasks(filter: { status?: string } = {}) {
 
   useEffect(() => {
     setLoading(true);
-    let q = collection(db, "approval_tasks");
+    let q = query(collection(db, "approval_tasks"));
     if (filter.status) {
-      q = query(q, where("status", "==", filter.status));
+      q = query(collection(db, "approval_tasks"), where("status", "==", filter.status));
     }
     const unsub = onSnapshot(q, (snap) => {
       setTasks(snap.docs.map((doc) => ({ id: doc.id, ...doc.data() })));

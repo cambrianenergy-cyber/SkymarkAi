@@ -2,6 +2,7 @@
 // This API can be expanded for dashboards, Prometheus, or external monitoring
 
 import { db } from "@/lib/orchestrator/firestore";
+import { collection, query, where, orderBy, limit, getDocs } from "firebase/firestore";
 import type { NextApiRequest, NextApiResponse } from "next";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -11,30 +12,33 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   if (!workspaceId) return res.status(400).json({ error: "workspaceId required" });
 
   // Gather recent agent_tasks
-  const tasksSnap = await db()
-    .collection("agent_tasks")
-    .where("workspaceId", "==", workspaceId)
-    .orderBy("updatedAt", "desc")
-    .limit(50)
-    .get();
+  const tasksQ = query(
+    collection(db, "agent_tasks"),
+    where("workspaceId", "==", workspaceId),
+    orderBy("updatedAt", "desc"),
+    limit(50)
+  );
+  const tasksSnap = await getDocs(tasksQ);
   const tasks = tasksSnap.docs.map(d => ({ id: d.id, ...d.data() }));
 
   // Gather recent agent_runs
-  const runsSnap = await db()
-    .collection("agent_runs")
-    .where("workspaceId", "==", workspaceId)
-    .orderBy("updatedAt", "desc")
-    .limit(50)
-    .get();
+  const runsQ = query(
+    collection(db, "agent_runs"),
+    where("workspaceId", "==", workspaceId),
+    orderBy("updatedAt", "desc"),
+    limit(50)
+  );
+  const runsSnap = await getDocs(runsQ);
   const runs = runsSnap.docs.map(d => ({ id: d.id, ...d.data() }));
 
   // Gather recent workflow_runs
-  const wfSnap = await db()
-    .collection("workflow_runs")
-    .where("workspaceId", "==", workspaceId)
-    .orderBy("updatedAt", "desc")
-    .limit(20)
-    .get();
+  const wfQ = query(
+    collection(db, "workflow_runs"),
+    where("workspaceId", "==", workspaceId),
+    orderBy("updatedAt", "desc"),
+    limit(20)
+  );
+  const wfSnap = await getDocs(wfQ);
   const workflows = wfSnap.docs.map(d => ({ id: d.id, ...d.data() }));
 
   // Optionally filter by agentId, runId, status

@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { INDUSTRY_PLAYBOOKS } from "@/lib/playbooks";
+import { INDUSTRY_PLAYBOOKS } from "../../../../lib/playbooks";
 import { getAgentSpecialization } from "@/lib/agentRunnerRegistry";
 import { ArrowLeft, ChevronDown, ChevronUp } from "lucide-react";
 import React, { useState } from "react";

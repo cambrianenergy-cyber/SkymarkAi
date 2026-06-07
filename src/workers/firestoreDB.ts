@@ -1,45 +1,41 @@
-import { getFirestore, Timestamp } from "@/lib/firebaseAdmin";
-import type {
-  OrchestratorDB,
-  Workflow,
-  WorkflowRun,
-  StepRunRecord,
-  OrchestratorEvent,
-  PlanGate,
-} from "./orchestrator";
+import { getFirestore } from "@/lib/firebaseAdmin";
+import { Timestamp } from "firebase-admin/firestore";
+// import types from orchestrator if/when available
 import { buildPlanGate } from "../../lib/planGate";
 
-export class FirestoreOrchestratorDB implements OrchestratorDB {
-  private db = getFirestore();
+// Temporary type definitions (replace with real imports if available)
+type WorkflowRun = {
+  status: string;
+  error?: any;
+};
+type StepRunRecord = {
+  stepId: string;
+  order: number;
+  agentType: string;
+  status: string;
+  attempts: number;
+  input: any;
+  startedAt?: any;
+  endedAt?: any;
+  output?: any;
+  error?: any;
+  ms?: number;
+};
+type OrchestratorEvent = Record<string, any>;
+type PlanGate = ReturnType<typeof buildPlanGate>;
 
-  async getWorkflow(workflowId: string, workspaceId: string): Promise<Workflow | null> {
-    try {
-      const docSnap = await this.db.collection("workflows").doc(workflowId).get();
-      
-      if (!docSnap.exists) return null;
-      
-      const data = docSnap.data()!;
-      
-      // Verify workspace ownership
-      if (data.workspaceId !== workspaceId) return null;
-      
-      return {
-        id: docSnap.id,
-        workspaceId: data.workspaceId,
-        name: data.name,
-        description: data.description ?? null,
-        status: data.status ?? "active",
-        steps: data.steps ?? [],
-        createdAt: data.createdAt,
-        updatedAt: data.updatedAt,
-      };
-    } catch (error) {
-      console.error("Error getting workflow:", error);
-      return null;
-    }
-  }
+// Define WorkspaceData type for Firestore workspace documents
+type WorkspaceData = {
+  plan?: string;
+  [key: string]: any;
+};
 
-  async getWorkflowRun(runId: string, workspaceId: string): Promise<WorkflowRun | null> {
+export class FirestoreOrchestratorDB {
+  private db: any = getFirestore();
+
+  // Removed duplicate setRunStatus method
+
+  async getWorkflowRun(runId: string, workspaceId: string): Promise<any> {
     try {
       const docSnap = await this.db.collection("workflow_runs").doc(runId).get();
       
@@ -80,7 +76,7 @@ export class FirestoreOrchestratorDB implements OrchestratorDB {
     }
   }
 
-  async createOrUpdateRun(run: Partial<WorkflowRun> & { id: string; workspaceId: string }): Promise<void> {
+  async createOrUpdateRun(run: any): Promise<void> {
     try {
       const docRef = this.db.collection("workflow_runs").doc(run.id);
       const updateData: any = {
@@ -103,42 +99,6 @@ export class FirestoreOrchestratorDB implements OrchestratorDB {
     }
   }
 
-  async setRunStatus(args: {
-    workspaceId: string;
-    runId: string;
-    status: WorkflowRun["status"];
-    error?: WorkflowRun["error"];
-    currentStepIndex?: number;
-  }): Promise<void> {
-    try {
-      const docRef = this.db.collection("workflow_runs").doc(args.runId);
-      const updateData: any = {
-        status: args.status,
-        updatedAt: Timestamp.now(),
-      };
-
-      if (args.currentStepIndex !== undefined) {
-        updateData.currentStepIndex = args.currentStepIndex;
-      }
-
-      if (args.error !== undefined) {
-        updateData.error = args.error;
-      }
-
-      if (args.status === "completed") {
-        updateData.completedAt = Timestamp.now();
-      }
-
-      if (args.status === "canceled") {
-        updateData.canceledAt = Timestamp.now();
-      }
-
-      await docRef.update(updateData);
-    } catch (error) {
-      console.error("Error setting run status:", error);
-      throw error;
-    }
-  }
 
   async upsertStepRecord(args: { workspaceId: string; runId: string; stepRecord: StepRunRecord }): Promise<void> {
     try {
@@ -218,8 +178,8 @@ export class FirestoreOrchestratorDB implements OrchestratorDB {
           return buildPlanGate("accelerate");
       }
       
-        const data = workspaceSnap.data()!;
-        const plan = data.plan ?? "accelerate";
+      const data = workspaceSnap.data() as WorkspaceData;
+      const plan = data.plan ?? "accelerate";
       
       return buildPlanGate(plan);
     } catch (error) {

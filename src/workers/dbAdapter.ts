@@ -1,14 +1,14 @@
 // src/workers/dbAdapter.ts
-import type { OrchestratorDB, Workflow, WorkflowRun, PlanGate, StepRunRecord, OrchestratorEvent } from "./orchestrator";
+// import types from orchestrator if/when available
 
-export function makeFirestoreDB(): OrchestratorDB {
+export function makeFirestoreDB(): any {
   return {
-    async getWorkflow(workflowId: string, workspaceId: string): Promise<Workflow | null> {
+    async getWorkflow(workflowId: string, workspaceId: string): Promise<any> {
       // TODO: fetch from `workflows` where id == workflowId and workspaceId matches
       return null;
     },
 
-    async getWorkflowRun(runId: string, workspaceId: string): Promise<WorkflowRun | null> {
+    async getWorkflowRun(runId: string, workspaceId: string): Promise<any> {
       // TODO: fetch from `workflow_runs`
       return null;
     },
@@ -21,11 +21,11 @@ export function makeFirestoreDB(): OrchestratorDB {
       // TODO: update `workflow_runs/{runId}`
     },
 
-    async upsertStepRecord({ workspaceId, runId, stepRecord }: { workspaceId: string; runId: string; stepRecord: StepRunRecord }): Promise<void> {
+    async upsertStepRecord({ workspaceId, runId, stepRecord }: any): Promise<void> {
       // TODO: set `workflow_runs/{runId}/steps/{stepId}` (subcollection) OR a top-level collection `workflow_run_steps`
     },
 
-    async appendAuditLog(event: OrchestratorEvent): Promise<void> {
+    async appendAuditLog(event: any): Promise<void> {
       // TODO: add to `audit_logs`
     },
 
@@ -39,7 +39,7 @@ export function makeFirestoreDB(): OrchestratorDB {
       return false;
     },
 
-    async getPlanGate(workspaceId: string): Promise<PlanGate> {
+    async getPlanGate(workspaceId: string): Promise<any> {
       // TODO: load subscription/plan for workspace and build PlanGate
       return {
           plan: "accelerate",

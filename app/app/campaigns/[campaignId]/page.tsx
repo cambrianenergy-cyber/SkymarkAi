@@ -17,6 +17,18 @@ import {
 } from "firebase/firestore";
 import { auth, db } from "../../../../lib/firebase";
 
+// Minimal WorkflowRun type to unblock build
+type WorkflowRun = {
+  id: string;
+  status: string;
+  progress: {
+    totalSteps: number;
+    completedSteps: number;
+    currentStepOrder: number;
+  };
+  [key: string]: any; // Add more fields as needed
+};
+
 interface Campaign {
   id: string;
   workspaceId: string;
@@ -49,6 +61,9 @@ interface CampaignRun {
     delivered: number;
     failed: number;
     replied: number;
+    queued?: number;
+    opened?: number;
+    clicked?: number;
   };
   logs?: Array<{ timestamp: any; event: string; details?: any }>;
 }
@@ -56,7 +71,7 @@ interface CampaignRun {
 export default function CampaignDetailPage() {
   const router = useRouter();
   const params = useParams();
-  const campaignId = params.campaignId as string;
+  const campaignId = params?.campaignId as string;
 
   const [user, setUser] = useState<any>(null);
   const [authChecked, setAuthChecked] = useState(false);
@@ -66,6 +81,8 @@ export default function CampaignDetailPage() {
   const [campaign, setCampaign] = useState<Campaign | null>(null);
   const [workflowRun, setWorkflowRun] = useState<WorkflowRun | null>(null);
   const [campaignRun, setCampaignRun] = useState<CampaignRun | null>(null);
+  const [preflightError, setPreflightError] = useState<string | null>(null);
+  const [approving, setApproving] = useState(false);
 
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, (u) => {
@@ -203,6 +220,24 @@ export default function CampaignDetailPage() {
       }
     });
     return unsubscribe;
+  }
+
+  async function handleApproveAndLaunch() {
+    if (!campaignRun) return;
+    setApproving(true);
+    try {
+      // Update campaign_run status to 'scheduled' or 'running' as appropriate
+      await updateDoc(doc(db, "campaign_runs", campaignRun.id), {
+        status: "scheduled",
+        updatedAt: serverTimestamp(),
+      });
+      setCampaignRun({ ...campaignRun, status: "scheduled" });
+      setPreflightError(null);
+    } catch (error) {
+      alert("Failed to approve and launch: " + (error as any).message);
+    } finally {
+      setApproving(false);
+    }
   }
 
   async function handleGenerateCampaign() {

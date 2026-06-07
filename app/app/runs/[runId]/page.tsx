@@ -64,7 +64,7 @@ interface WorkflowRun {
 export default function RunDetailPage() {
   const router = useRouter();
   const params = useParams();
-  const runId = params.runId as string;
+  const runId = params?.runId as string;
 
   const [user, setUser] = useState<any>(null);
   const [authChecked, setAuthChecked] = useState(false);

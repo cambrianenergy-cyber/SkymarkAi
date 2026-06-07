@@ -38,7 +38,7 @@ interface Member {
 export default function WorkspaceDetailPage() {
   const router = useRouter();
   const params = useParams();
-  const workspaceId = params.workspaceId as string;
+  const workspaceId = params?.workspaceId as string;
 
   const [user, setUser] = useState<any>(null);
   const [authChecked, setAuthChecked] = useState(false);

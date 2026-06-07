@@ -1,3 +1,6 @@
+export * from "../src/lib/firebaseAdmin";
+
+import { adminDb as stubAdminDb } from "../src/lib/firebaseAdmin";
 import admin from "firebase-admin";
 
 function ensureAdminApp() {
@@ -26,12 +29,12 @@ export function getAdminApp() {
 
 export const adminApp = ensureAdminApp();
 export const adminAuth = admin.auth(adminApp);
-export const db = admin.firestore(adminApp);
-export const adminDb = db;
+
 
 export function getFirestore() {
-  return adminDb;
+  return stubAdminDb;
 }
+
 
 export const FieldValue = admin.firestore.FieldValue;
 export const Timestamp = admin.firestore.Timestamp;

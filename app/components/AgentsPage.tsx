@@ -114,8 +114,8 @@ export default function AgentsPage() {
   const sp = useSearchParams();
 
   // Optional: allow testing via URL like ?plan=pro&founder=1
-  const userPlan = clampPlan(sp.get("plan"));
-  const isFounder = sp.get("founder") === "1" || userPlan === "founder";
+  const userPlan = clampPlan(sp?.get("plan") ?? null);
+  const isFounder = sp?.get("founder") === "1" || userPlan === "founder";
   const planLimit = PLAN_LIMITS[userPlan].maxAgents;
 
   const [plan, setPlan] = useState<Plan>(userPlan);

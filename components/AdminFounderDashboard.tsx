@@ -186,7 +186,7 @@ export default function AdminFounderDashboard() {
   const [action, setAction] = useState("pause");
   const [reason, setReason] = useState("");
   const [status, setStatus] = useState<string | null>(null);
-  const workspaceId = "demo-workspace"; // Replace with real context
+  const workspaceId = "V7kzoES7soCvRCWa74Kg"; // User workspaceId
   const actorId = "founder-demo"; // Replace with real founder/admin id
 
   async function handleOverride(e: React.FormEvent) {

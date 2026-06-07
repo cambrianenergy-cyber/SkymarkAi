@@ -1,5 +1,4 @@
 import { NextResponse } from "next/server";
-import { NextResponse } from "next/server";
 import { adminDb } from "@/lib/firebaseAdmin";
 import { encryptToken } from "@/lib/integrations/encryption";
 import { fetchMetaToken, fetchXToken } from "@/lib/integrations/social/exchange";
@@ -38,7 +37,7 @@ export async function GET(req: Request) {
 
 
   // Write integrations + onboarding snapshot
-  await adminDb.collection("integrations").add({
+  await adminDb.collection("integrations").doc(`${workspaceId}_${provider}`).set({
     workspaceId,
     provider,
     status: "connected",
@@ -53,12 +52,15 @@ export async function GET(req: Request) {
   let deferred = false;
   if (onboardingSnap.exists) {
     const onboarding = onboardingSnap.data();
-    const prev = onboarding?.integrations?.social || {};
-    connectedPlatforms = Array.isArray(prev.connectedPlatforms)
-      ? Array.from(new Set([...prev.connectedPlatforms, provider]))
-      : [provider];
-    statusByPlatform = { ...(prev.statusByPlatform || {}), [provider]: { status: "connected" } };
-    deferred = !!prev.deferred && connectedPlatforms.length === 0;
+    let prev = {};
+    if (onboarding && typeof onboarding === 'object' && 'integrations' in onboarding && onboarding.integrations && typeof onboarding.integrations === 'object' && 'social' in onboarding.integrations) {
+      prev = onboarding.integrations.social || {};
+    }
+    const prevConnectedPlatforms = (prev && typeof prev === 'object' && 'connectedPlatforms' in prev && Array.isArray(prev.connectedPlatforms)) ? prev.connectedPlatforms : [];
+    connectedPlatforms = Array.from(new Set([...prevConnectedPlatforms, provider]));
+    const prevStatusByPlatform = (prev && typeof prev === 'object' && 'statusByPlatform' in prev && prev.statusByPlatform && typeof prev.statusByPlatform === 'object') ? prev.statusByPlatform : {};
+    statusByPlatform = { ...prevStatusByPlatform, [provider]: { status: "connected" } };
+    deferred = (prev && typeof prev === 'object' && 'deferred' in prev && !!prev.deferred && connectedPlatforms.length === 0);
   }
   const connectedCount = connectedPlatforms.length;
   await onboardingRef.set({

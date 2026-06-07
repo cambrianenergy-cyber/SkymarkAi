@@ -121,7 +121,7 @@ export function useAuthGuard() {
 /**
  * Loading component to show while guard is checking
  */
-export function GuardLoadingScreen(): JSX.Element {
+export function GuardLoadingScreen(): React.ReactElement {
   return (
     <div
       style={{

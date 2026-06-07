@@ -30,8 +30,8 @@ interface Invite {
   createdAt: any;
 }
 
-// Use the primary workspace ID
-const DEFAULT_WORKSPACE_ID = "NtabEfcWZHdcKSsWi4fN";
+// Use the user's workspace ID
+const DEFAULT_WORKSPACE_ID = "V7kzoES7soCvRCWa74Kg";
 
 export default function TeamPage() {
   const router = useRouter();

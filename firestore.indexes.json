@@ -1,432 +1,51 @@
-{
+﻿{
   "indexes": [
     {
-      "collectionGroup": "steps",
-      "queryScope": "COLLECTION",
-      "fields": [
-        { "fieldPath": "runId", "order": "ASCENDING" },
-        { "fieldPath": "createdAt", "order": "DESCENDING" }
-      ]
-    },
-    {
-      "collectionGroup": "admin_dashboards",
-      "queryScope": "COLLECTION",
-      "fields": [
-        { "fieldPath": "workspaceId", "order": "ASCENDING" }
-      ]
-    },
-    {
-      "collectionGroup": "cost_usage_logs",
+      "collectionGroup": "users",
       "queryScope": "COLLECTION",
       "fields": [
         { "fieldPath": "workspaceId", "order": "ASCENDING" },
-        { "fieldPath": "createdAt", "order": "DESCENDING" }
+        { "fieldPath": "role", "order": "ASCENDING" }
       ]
     },
     {
-      "collectionGroup": "orchestrator_events",
+      "collectionGroup": "users",
       "queryScope": "COLLECTION",
       "fields": [
         { "fieldPath": "workspaceId", "order": "ASCENDING" },
-        { "fieldPath": "createdAt", "order": "DESCENDING" }
-      ]
-    },
-    {
-      "collectionGroup": "tool_registry",
-      "queryScope": "COLLECTION",
-      "fields": [
-        { "fieldPath": "workspaceId", "order": "ASCENDING" },
-        { "fieldPath": "toolKey", "order": "ASCENDING" }
-      ]
-    },
-    {
-      "collectionGroup": "connections",
-      "queryScope": "COLLECTION",
-      "fields": [
-        { "fieldPath": "workspaceId", "order": "ASCENDING" },
-        { "fieldPath": "provider", "order": "ASCENDING" },
         { "fieldPath": "status", "order": "ASCENDING" }
       ]
     },
     {
-      "collectionGroup": "agent_tasks",
+      "collectionGroup": "tasks",
       "queryScope": "COLLECTION",
       "fields": [
         { "fieldPath": "workspaceId", "order": "ASCENDING" },
-        { "fieldPath": "status", "order": "ASCENDING" },
-        { "fieldPath": "updatedAt", "order": "DESCENDING" }
+        { "fieldPath": "type", "order": "ASCENDING" }
       ]
     },
     {
-      "collectionGroup": "subscriptions",
+      "collectionGroup": "tasks",
       "queryScope": "COLLECTION",
       "fields": [
         { "fieldPath": "workspaceId", "order": "ASCENDING" },
-        { "fieldPath": "status", "order": "ASCENDING" },
-        { "fieldPath": "startedAt", "order": "DESCENDING" }
+        { "fieldPath": "assignedUser", "order": "ASCENDING" }
       ]
     },
     {
-      "collectionGroup": "workflows",
+      "collectionGroup": "messages",
       "queryScope": "COLLECTION",
       "fields": [
         { "fieldPath": "workspaceId", "order": "ASCENDING" },
-        { "fieldPath": "createdAt", "order": "DESCENDING" }
+        { "fieldPath": "timestamp", "order": "DESCENDING" }
       ]
     },
     {
-      "collectionGroup": "workspace_knowledge",
+      "collectionGroup": "workspaces",
       "queryScope": "COLLECTION",
       "fields": [
-        { "fieldPath": "workspaceId", "order": "ASCENDING" },
-        { "fieldPath": "createdAt", "order": "DESCENDING" }
-      ]
-    },
-    {
-      "collectionGroup": "agent_memory",
-      "queryScope": "COLLECTION",
-      "fields": [
-        { "fieldPath": "workspaceId", "order": "ASCENDING" },
-        { "fieldPath": "agentId", "order": "ASCENDING" },
-        { "fieldPath": "tier", "order": "ASCENDING" },
-        { "fieldPath": "createdAt", "order": "DESCENDING" }
-      ]
-    },
-        {
-          "collectionGroup": "onboarding_states",
-          "queryScope": "COLLECTION",
-          "fields": [
-            { "fieldPath": "workspaceId", "order": "ASCENDING" },
-            { "fieldPath": "userId", "order": "ASCENDING" }
-          ]
-        },
-        {
-          "collectionGroup": "connections",
-          "queryScope": "COLLECTION",
-          "fields": [
-            { "fieldPath": "workspaceId", "order": "ASCENDING" },
-            { "fieldPath": "provider", "order": "ASCENDING" },
-            { "fieldPath": "status", "order": "ASCENDING" }
-          ]
-        },
-        {
-          "collectionGroup": "workflow_runs",
-          "queryScope": "COLLECTION",
-          "fields": [
-            { "fieldPath": "workspaceId", "order": "ASCENDING" },
-            { "fieldPath": "status", "order": "ASCENDING" },
-            { "fieldPath": "startedAt", "order": "DESCENDING" }
-          ]
-        },
-        {
-          "collectionGroup": "agent_tasks",
-          "queryScope": "COLLECTION",
-          "fields": [
-            { "fieldPath": "workspaceId", "order": "ASCENDING" },
-            { "fieldPath": "status", "order": "ASCENDING" },
-            { "fieldPath": "updatedAt", "order": "DESCENDING" }
-          ]
-        },
-        {
-          "collectionGroup": "audit_logs",
-          "queryScope": "COLLECTION",
-          "fields": [
-            { "fieldPath": "workspaceId", "order": "ASCENDING" },
-            { "fieldPath": "createdAt", "order": "DESCENDING" }
-          ]
-        },
-    {
-      "collectionGroup": "integrations",
-      "queryScope": "COLLECTION",
-      "fields": [
-        { "fieldPath": "workspaceId", "order": "ASCENDING" },
-        { "fieldPath": "type", "order": "ASCENDING" },
-        { "fieldPath": "status", "order": "ASCENDING" }
-      ]
-    },
-    {
-      "collectionGroup": "usage_meters",
-      "queryScope": "COLLECTION",
-      "fields": [
-        { "fieldPath": "workspaceId", "order": "ASCENDING" },
-        { "fieldPath": "period", "order": "ASCENDING" }
-      ]
-    },
-    {
-      "collectionGroup": "approvals",
-      "queryScope": "COLLECTION",
-      "fields": [
-        { "fieldPath": "workspaceId", "order": "ASCENDING" },
         { "fieldPath": "status", "order": "ASCENDING" },
         { "fieldPath": "createdAt", "order": "DESCENDING" }
-      ]
-    },
-    {
-      "collectionGroup": "approvals",
-      "queryScope": "COLLECTION",
-      "fields": [
-        { "fieldPath": "workspaceId", "order": "ASCENDING" },
-        { "fieldPath": "runId", "order": "ASCENDING" }
-      ]
-    },
-    {
-      "collectionGroup": "artifacts",
-      "queryScope": "COLLECTION",
-      "fields": [
-        { "fieldPath": "workspaceId", "order": "ASCENDING" },
-        { "fieldPath": "type", "order": "ASCENDING" },
-        { "fieldPath": "createdAt", "order": "DESCENDING" }
-      ]
-    },
-    {
-      "collectionGroup": "artifacts",
-      "queryScope": "COLLECTION",
-      "fields": [
-        { "fieldPath": "workspaceId", "order": "ASCENDING" },
-        { "fieldPath": "threadId", "order": "ASCENDING" },
-        { "fieldPath": "createdAt", "order": "DESCENDING" }
-      ]
-    },
-    {
-      "collectionGroup": "threads",
-      "queryScope": "COLLECTION",
-      "fields": [
-        { "fieldPath": "workspaceId", "order": "ASCENDING" },
-        { "fieldPath": "status", "order": "ASCENDING" },
-        { "fieldPath": "lastMessageAt", "order": "DESCENDING" }
-      ]
-    },
-    {
-      "collectionGroup": "threads",
-      "queryScope": "COLLECTION",
-      "fields": [
-        { "fieldPath": "workspaceId", "order": "ASCENDING" },
-        { "fieldPath": "createdBy", "order": "ASCENDING" },
-        { "fieldPath": "createdAt", "order": "DESCENDING" }
-      ]
-    },
-    {
-      "collectionGroup": "llm_sessions",
-      "queryScope": "COLLECTION",
-      "fields": [
-        { "fieldPath": "workspaceId", "order": "ASCENDING" },
-        { "fieldPath": "createdAt", "order": "DESCENDING" }
-      ]
-    },
-    {
-      "collectionGroup": "llm_sessions",
-      "queryScope": "COLLECTION",
-      "fields": [
-        { "fieldPath": "workspaceId", "order": "ASCENDING" },
-        { "fieldPath": "runId", "order": "ASCENDING" }
-      ]
-    },
-    {
-      "collectionGroup": "llm_sessions",
-      "queryScope": "COLLECTION",
-      "fields": [
-        { "fieldPath": "workspaceId", "order": "ASCENDING" },
-        { "fieldPath": "agentId", "order": "ASCENDING" },
-        { "fieldPath": "createdAt", "order": "DESCENDING" }
-      ]
-    },
-    {
-      "collectionGroup": "policy_profiles",
-      "queryScope": "COLLECTION",
-      "fields": [
-        { "fieldPath": "workspaceId", "order": "ASCENDING" },
-        { "fieldPath": "name", "order": "ASCENDING" }
-      ]
-    },
-    {
-      "collectionGroup": "tool_calls",
-      "queryScope": "COLLECTION",
-      "fields": [
-        { "fieldPath": "workspaceId", "order": "ASCENDING" },
-        { "fieldPath": "runId", "order": "ASCENDING" }
-      ]
-    },
-    {
-      "collectionGroup": "tool_calls",
-      "queryScope": "COLLECTION",
-      "fields": [
-        { "fieldPath": "workspaceId", "order": "ASCENDING" },
-        { "fieldPath": "agentId", "order": "ASCENDING" },
-        { "fieldPath": "createdAt", "order": "DESCENDING" }
-      ]
-    },
-    {
-      "collectionGroup": "tool_calls",
-      "queryScope": "COLLECTION",
-      "fields": [
-        { "fieldPath": "workspaceId", "order": "ASCENDING" },
-        { "fieldPath": "toolKey", "order": "ASCENDING" },
-        { "fieldPath": "status", "order": "ASCENDING" }
-      ]
-    },
-        {
-          "collectionGroup": "tool_registry",
-          "queryScope": "COLLECTION",
-          "fields": [
-            { "fieldPath": "workspaceId", "order": "ASCENDING" },
-            { "fieldPath": "type", "order": "ASCENDING" },
-            { "fieldPath": "enabled", "order": "ASCENDING" },
-            { "fieldPath": "updatedAt", "order": "DESCENDING" }
-          ]
-        },
-        {
-          "collectionGroup": "tool_runs",
-          "queryScope": "COLLECTION",
-          "fields": [
-            { "fieldPath": "workspaceId", "order": "ASCENDING" },
-            { "fieldPath": "toolId", "order": "ASCENDING" },
-            { "fieldPath": "status", "order": "ASCENDING" },
-            { "fieldPath": "createdAt", "order": "DESCENDING" }
-          ]
-        },
-        {
-          "collectionGroup": "execution_failures",
-          "queryScope": "COLLECTION",
-          "fields": [
-            { "fieldPath": "workspaceId", "order": "ASCENDING" },
-            { "fieldPath": "agentId", "order": "ASCENDING" },
-            { "fieldPath": "createdAt", "order": "DESCENDING" }
-          ]
-        },
-        {
-          "collectionGroup": "orchestrator_events",
-          "queryScope": "COLLECTION",
-          "fields": [
-            { "fieldPath": "workspaceId", "order": "ASCENDING" },
-            { "fieldPath": "type", "order": "ASCENDING" },
-            { "fieldPath": "status", "order": "ASCENDING" },
-            { "fieldPath": "createdAt", "order": "DESCENDING" }
-          ]
-        },
-        {
-          "collectionGroup": "cost_usage_logs",
-          "queryScope": "COLLECTION",
-          "fields": [
-            { "fieldPath": "workspaceId", "order": "ASCENDING" },
-            { "fieldPath": "type", "order": "ASCENDING" },
-            { "fieldPath": "createdAt", "order": "DESCENDING" }
-          ]
-        },
-        {
-          "collectionGroup": "policy_violations",
-          "queryScope": "COLLECTION",
-          "fields": [
-            { "fieldPath": "workspaceId", "order": "ASCENDING" },
-            { "fieldPath": "agentId", "order": "ASCENDING" },
-            { "fieldPath": "createdAt", "order": "DESCENDING" }
-          ]
-        },
-        {
-          "collectionGroup": "agent_tasks",
-          "queryScope": "COLLECTION",
-          "fields": [
-            { "fieldPath": "workspaceId", "order": "ASCENDING" },
-            { "fieldPath": "agentId", "order": "ASCENDING" },
-            { "fieldPath": "status", "order": "ASCENDING" },
-            { "fieldPath": "priority", "order": "ASCENDING" },
-            { "fieldPath": "createdAt", "order": "ASCENDING" }
-          ]
-        },
-        {
-          "collectionGroup": "agent_tasks",
-          "queryScope": "COLLECTION",
-          "fields": [
-            { "fieldPath": "workspaceId", "order": "ASCENDING" },
-            { "fieldPath": "status", "order": "ASCENDING" },
-            { "fieldPath": "dueAt", "order": "ASCENDING" }
-          ]
-        },
-        {
-          "collectionGroup": "agent_tasks",
-          "queryScope": "COLLECTION",
-          "fields": [
-            { "fieldPath": "workspaceId", "order": "ASCENDING" },
-            { "fieldPath": "status", "order": "ASCENDING" },
-            { "fieldPath": "priority", "order": "ASCENDING" },
-            { "fieldPath": "timing.scheduledFor", "order": "ASCENDING" }
-          ]
-        },
-        {
-          "collectionGroup": "agent_tasks",
-          "queryScope": "COLLECTION",
-          "fields": [
-            { "fieldPath": "workspaceId", "order": "ASCENDING" },
-            { "fieldPath": "runId", "order": "ASCENDING" }
-          ]
-        },
-        {
-          "collectionGroup": "agent_tasks",
-          "queryScope": "COLLECTION",
-          "fields": [
-            { "fieldPath": "workspaceId", "order": "ASCENDING" },
-            { "fieldPath": "agentId", "order": "ASCENDING" },
-            { "fieldPath": "status", "order": "ASCENDING" }
-          ]
-        },
-    {
-      "collectionGroup": "agent_memory",
-      "queryScope": "COLLECTION",
-      "fields": [
-        { "fieldPath": "workspaceId", "order": "ASCENDING" },
-        { "fieldPath": "agentId", "order": "ASCENDING" },
-        { "fieldPath": "updatedAt", "order": "DESCENDING" }
-      ]
-    },
-    {
-      "collectionGroup": "agent_memory",
-      "queryScope": "COLLECTION",
-      "fields": [
-        { "fieldPath": "workspaceId", "order": "ASCENDING" },
-        { "fieldPath": "entityType", "order": "ASCENDING" },
-        { "fieldPath": "entityId", "order": "ASCENDING" },
-        { "fieldPath": "updatedAt", "order": "DESCENDING" }
-      ]
-    },
-    {
-      "collectionGroup": "agent_runs",
-      "queryScope": "COLLECTION",
-      "fields": [
-        { "fieldPath": "workspaceId", "order": "ASCENDING" },
-        { "fieldPath": "agentId", "order": "ASCENDING" },
-        { "fieldPath": "createdAt", "order": "DESCENDING" }
-      ]
-    },
-    {
-      "collectionGroup": "agent_runs",
-      "queryScope": "COLLECTION",
-      "fields": [
-        { "fieldPath": "workspaceId", "order": "ASCENDING" },
-        { "fieldPath": "status", "order": "ASCENDING" },
-        { "fieldPath": "createdAt", "order": "DESCENDING" }
-      ]
-    },
-    {
-      "collectionGroup": "workflows",
-      "queryScope": "COLLECTION",
-      "fields": [
-        { "fieldPath": "workspaceId", "order": "ASCENDING" },
-        { "fieldPath": "updatedAt", "order": "DESCENDING" }
-      ]
-    },
-    {
-      "collectionGroup": "leads",
-      "queryScope": "COLLECTION",
-      "fields": [
-        { "fieldPath": "workspaceId", "order": "ASCENDING" },
-        { "fieldPath": "updatedAt", "order": "DESCENDING" }
-      ]
-    },
-    {
-      "collectionGroup": "campaigns",
-      "queryScope": "COLLECTION",
-      "fields": [
-        { "fieldPath": "workspaceId", "order": "ASCENDING" },
-        { "fieldPath": "updatedAt", "order": "DESCENDING" }
       ]
     }
   ],

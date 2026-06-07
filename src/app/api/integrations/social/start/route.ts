@@ -1,11 +1,11 @@
 import { NextResponse } from "next/server";
 import crypto from "crypto";
 // Adjust the following imports to match your actual project structure and exports
-import { firebaseAdmin } from "@/lib/firebaseAdmin";
+import { adminDb } from "@/lib/firebaseAdmin";
 // Adjust the following import path to the correct location of requireSession in your project:
 import { requireSession } from "@/lib/auth/requireSession";
 
-const db = firebaseAdmin.firestore();
+const db = adminDb;
 
 const PROVIDER_CONFIG = {
   snapchat: {

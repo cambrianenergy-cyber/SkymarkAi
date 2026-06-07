@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../../lib/firebase";
+import { signInWithEmailAndPassword, createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { auth } from "@/lib/firebase";
 import { BRAND } from "@/lib/config";
 import { useRouter } from "next/navigation";
 
@@ -26,6 +26,17 @@ export default function LoginPage() {
       router.push("/app");
     } catch (err: any) {
       setError(err?.message ?? "Login failed");
+    }
+  }
+
+  async function handleGoogleLogin() {
+    setError("");
+    try {
+      const provider = new GoogleAuthProvider();
+      await signInWithPopup(auth, provider);
+      router.push("/app");
+    } catch (err: any) {
+      setError(err?.message ?? "Google login failed");
     }
   }
 
@@ -65,6 +76,14 @@ export default function LoginPage() {
           {mode === "login" ? "Log In" : "Create Account"}
         </button>
 
+        <button
+          type="button"
+          onClick={handleGoogleLogin}
+          style={{ padding: 12, background: "#fff", color: "#333", border: "1px solid #ccc", borderRadius: 4 }}
+        >
+          Continue with Google
+        </button>
+
         {error && <p style={{ color: "crimson" }}>{error}</p>}
 
         <button
@@ -73,6 +92,14 @@ export default function LoginPage() {
           style={{ padding: 10 }}
         >
           {mode === "login" ? "Need an account? Sign up" : "Already have an account? Log in"}
+        </button>
+
+        <button
+          type="button"
+          onClick={() => setMode("signup")}
+          style={{ padding: 10 }}
+        >
+          Create Account
         </button>
       </form>
     </main>
